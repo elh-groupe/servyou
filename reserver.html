@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Réserver une table</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f4f6fa;--surface:#ffffff;--sunken:#eef1f7;--ink:#1b2333;--muted:#5d6880;--line:#d6dce8;
+  --accent:#2f5bd8;--accent-ink:#ffffff;--accent-soft:#e1e9fd;--danger:#b3372f;--danger-soft:#f7dcd9;
+  --display:"Bricolage Grotesque","Inter",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px 90px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;width:100%;max-width:500px;padding:30px 26px;box-shadow:0 2px 12px rgba(20,30,60,.06)}
+h1{font-family:var(--display);font-weight:700;font-size:25px;text-align:center;letter-spacing:-.02em;text-wrap:balance}
+.subtitle{text-align:center;color:var(--muted);font-size:14px;margin:4px 0 26px}
+.field{margin-bottom:18px}
+label,.lab{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
+.req{color:var(--danger);margin-left:2px}
+input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--sunken);color:var(--ink);font:inherit;font-size:15px}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea{resize:vertical;min-height:70px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.row{grid-template-columns:1fr}}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--sunken);color:var(--ink);border-radius:8px;padding:9px 14px;font:inherit;font-size:14px;cursor:pointer;font-variant-numeric:tabular-nums}
+.chip:hover{border-color:var(--muted)}
+.chip.on{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:600}
+.grid .chip{min-height:50px;font-weight:600}
+.primary{display:block;width:100%;padding:13px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;font-size:16px;cursor:pointer;margin-top:22px}
+.primary:disabled{opacity:.55;cursor:not-allowed}
+.msg{text-align:center;padding:30px 10px}
+.msg h2{font-family:var(--display);font-size:22px;margin-bottom:8px}
+.msg p{color:var(--muted)}
+.err{background:var(--danger-soft);color:var(--danger);border-radius:8px;padding:10px 12px;margin-top:14px;font-size:14px}
+.muted{color:var(--muted);font-size:13px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#consent{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:13px}
+#consent button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}
+#consent button.yes{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<main class="card" id="card">
+  <h1 id="title">Réserver une table</h1>
+  <p class="subtitle" id="subtitle">Choisissez votre restaurant et votre créneau</p>
+
+  <form id="form" novalidate>
+    <div class="field" id="venueField">
+      <span class="lab">Restaurant <span class="req">*</span></span>
+      <div class="grid" id="venues"></div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="date">Date <span class="req">*</span></label>
+        <input type="date" id="date" required>
+      </div>
+      <div class="field">
+        <label for="guests">Nombre de personnes <span class="req">*</span></label>
+        <input type="number" id="guests" min="1" max="30" value="2" inputmode="numeric" required>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lab">Heure <span class="req">*</span></span>
+      <div class="chips" id="slots"></div>
+    </div>
+    <div class="field">
+      <label for="name">Nom complet <span class="req">*</span></label>
+      <input type="text" id="name" placeholder="Prénom et nom" autocomplete="name" maxlength="80" required>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="phone">Téléphone <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="+212 6…" autocomplete="tel" maxlength="30" required>
+      </div>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="Facultatif" autocomplete="email" maxlength="120">
+      </div>
+    </div>
+    <div class="field">
+      <label for="notes">Demande particulière</label>
+      <textarea id="notes" maxlength="400" placeholder="Anniversaire, chaise bébé, allergie…"></textarea>
+    </div>
+    <div class="hp" aria-hidden="true"><label for="website">Ne pas remplir</label><input type="text" id="website" tabindex="-1" autocomplete="off"></div>
+    <button class="primary" id="send">Envoyer ma demande de réservation</button>
+    <div class="err" id="err" hidden></div>
+    <p class="muted" style="margin-top:12px;text-align:center">Votre réservation est confirmée par téléphone par le restaurant.</p>
+  </form>
+</main>
+
+<div id="consent" hidden>
+  <span>Nous utilisons des cookies de mesure d'audience pour suivre nos campagnes.</span>
+  <button type="button" id="cNo">Refuser</button><button type="button" class="yes" id="cYes">Accepter</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* Page publique de réservation servYou : lit la fiche publique de l'établissement et dépose la demande dans la base. */
+const FB={apiKey:"AIzaSyCWbEngQqwLYvAaSQ578rePe-dXvhEbPGg",authDomain:"servyou-elh.firebaseapp.com",projectId:"servyou-elh",storageBucket:"servyou-elh.firebasestorage.app",messagingSenderId:"637301546749",appId:"1:637301546749:web:645ff45b43c542f398e894"};
+firebase.initializeApp(FB);
+const db=firebase.firestore();
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,"0");
+const iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const mins=t=>{const a=String(t).split(":").map(Number);return a[0]*60+(a[1]||0)};
+const qs=new URLSearchParams(location.search);
+// Lien propre à un établissement : reserver.html?r=identifiant. Sans identifiant, le client choisit.
+const fixed=(qs.get("r")||location.hash.slice(1)||"").replace(/[^a-z0-9-]/gi,"").slice(0,40);
+let VENUES={},venue="",time="",tracked=false;
+// Campagne d'origine, gardée avec la réservation
+const campaign=["utm_source","utm_medium","utm_campaign","utm_content","fbclid","gclid"].filter(k=>qs.get(k)).map(k=>k+"="+(k.endsWith("clid")?"oui":qs.get(k).slice(0,40))).join(" ").slice(0,200);
+
+function closed(msg){$("card").innerHTML='<div class="msg"><h2>Réservation en ligne indisponible</h2><p></p></div>';$("card").querySelector("p").textContent=msg}
+function fail(msg){const e=$("err");e.textContent=msg;e.hidden=!msg}
+function renderVenues(){
+  const ids=Object.keys(VENUES);
+  $("venueField").hidden=ids.length<2;
+  if(ids.length===1){$("title").textContent="Réserver une table — "+VENUES[venue].name;$("subtitle").textContent="Choisissez votre date et votre créneau";document.title="Réserver — "+VENUES[venue].name;return}
+  $("venues").innerHTML="";
+  ids.forEach(id=>{const b=document.createElement("button");b.type="button";b.className="chip"+(id===venue?" on":"");b.textContent=VENUES[id].name;b.setAttribute("aria-pressed",id===venue);
+    b.addEventListener("click",()=>{venue=id;renderVenues();renderSlots();askConsent()});$("venues").appendChild(b)});
+}
+function renderSlots(){
+  const box=$("slots"),day=$("date").value,v=VENUES[venue];box.innerHTML="";
+  if(!day||!v)return;
+  if(v.maxGuests)$("guests").max=v.maxGuests;
+  const dow=new Date(day+"T12:00:00").getDay(),now=new Date(),today=iso(now),list=[];
+  (v.shifts||[]).filter(s=>(s.days||[]).includes(dow)).forEach(s=>{
+    const st=mins(s.start);let en=mins(s.end);if(en<=st)en+=1440;
+    let last=en-60;if(/^\d{2}:\d{2}$/.test(v.lastOnline||"")){let lo=mins(v.lastOnline);if(lo<st)lo+=1440;last=Math.min(last,lo)}
+    for(let m=st;m<=last;m+=30){
+      if(day===today&&m<now.getHours()*60+now.getMinutes()+60)continue;   // pas de créneau dans moins d'une heure
+      const t=pad(Math.floor(m/60)%24)+":"+pad(m%60);if(!list.includes(t))list.push(t)}
+  });
+  if(!list.includes(time))time="";
+  if(!list.length){box.innerHTML='<span class="muted">Aucun créneau en ligne ce jour-là. Choisissez une autre date ou appelez le restaurant.</span>';return}
+  list.forEach(t=>{const b=document.createElement("button");b.type="button";b.className="chip"+(t===time?" on":"");b.textContent=t;b.addEventListener("click",()=>{time=t;renderSlots()});box.appendChild(b)});
+}
+
+/* ---------- suivi des campagnes : chargé seulement après accord du visiteur ---------- */
+const hasTags=()=>{const c=VENUES[venue]||{};return !!(c.pixel||c.gtag||c.gtm)};
+function askConsent(){
+  if(!hasTags()||tracked)return;
+  let v="";try{v=localStorage.getItem("resa-consent")||""}catch(e){}
+  if(v==="oui")loadTags();else if(v!=="non")$("consent").hidden=false;
+}
+function setConsent(v){try{localStorage.setItem("resa-consent",v)}catch(e){}$("consent").hidden=true;if(v==="oui")loadTags()}
+$("cYes").addEventListener("click",()=>setConsent("oui"));
+$("cNo").addEventListener("click",()=>setConsent("non"));
+function script(src){const s=document.createElement("script");s.async=true;s.src=src;document.head.appendChild(s)}
+function loadTags(){
+  if(tracked)return;tracked=true;
+  const c=VENUES[venue]||{};window.dataLayer=window.dataLayer||[];
+  if(/^\d{5,20}$/.test(c.pixel||"")){                       // Meta Pixel
+    const n=window.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    window._fbq=n;n.push=n;n.loaded=true;n.version="2.0";n.queue=[];
+    script("https://connect.facebook.net/en_US/fbevents.js");fbq("init",c.pixel);fbq("track","PageView")}
+  if(/^(G|AW|GT)-[A-Za-z0-9-]{4,30}$/.test(c.gtag||"")){     // Google tag (Analytics 4 ou Google Ads)
+    window.gtag=function(){dataLayer.push(arguments)};
+    script("https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(c.gtag));gtag("js",new Date());gtag("config",c.gtag)}
+  if(/^GTM-[A-Za-z0-9]{4,12}$/.test(c.gtm||"")){             // Google Tag Manager
+    dataLayer.push({"gtm.start":Date.now(),event:"gtm.js"});script("https://www.googletagmanager.com/gtm.js?id="+encodeURIComponent(c.gtm))}
+}
+function trackBooking(d){
+  if(!tracked)return;
+  try{if(window.fbq)fbq("track","Schedule",{content_name:d.venueName,num_guests:d.covers});
+    if(window.gtag)gtag("event","generate_lead",{restaurant:d.venueName,couverts:d.covers});
+    dataLayer.push({event:"reservation_envoyee",restaurant:d.venueName,couverts:d.covers})}catch(e){}
+}
+
+/* ---------- envoi ---------- */
+$("form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const v=VENUES[venue];if(!v)return;
+  const d={name:$("name").value.trim().slice(0,80),phone:$("phone").value.trim().slice(0,30),email:$("email").value.trim().slice(0,120),covers:parseInt($("guests").value,10)||0,date:$("date").value,time,
+    table:"",pre:"pending",svc:"pending",status:"pending",source:"Site web",tags:[],note:$("notes").value.trim().slice(0,400),campaign,deposit:0,spend:0,walkin:false,duration:120,createdAt:new Date().toISOString(),web:true,clientId:""};
+  if(!d.date)return fail("Choisissez une date.");
+  if(!d.time)return fail("Choisissez une heure.");
+  if(d.covers<1)return fail("Indiquez le nombre de personnes.");
+  if(d.covers>30||(v.maxGuests&&d.covers>v.maxGuests))return fail("Pour un groupe de plus de "+(v.maxGuests||30)+" personnes, contactez directement le restaurant.");
+  if(!d.name)return fail("Indiquez votre nom.");
+  if(d.phone.replace(/\D/g,"").length<8)return fail("Indiquez un numéro de téléphone valide.");
+  fail("");
+  const btn=$("send");btn.disabled=true;btn.textContent="Envoi en cours…";
+  try{
+    if(!$("website").value)await db.collection("venues/"+venue+"/reservations").add(d);   // champ piège : rempli seulement par les robots
+    trackBooking({venueName:v.name,covers:d.covers});
+    const when=new Date(d.date+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+    $("card").innerHTML='<div class="msg"><h2>Demande envoyée</h2><p id="recap"></p><p style="margin-top:12px">Le restaurant vous appelle pour confirmer votre table.</p></div>';
+    $("recap").textContent=v.name+" — "+when+" à "+d.time+" — "+d.covers+" personne"+(d.covers>1?"s":"");
+  }catch(x){btn.disabled=false;btn.textContent="Envoyer ma demande de réservation";fail("L'envoi n'a pas abouti. Réessayez ou appelez directement le restaurant.")}
+});
+
+/* ---------- démarrage ---------- */
+const now=new Date(),max=new Date();max.setDate(max.getDate()+60);
+$("date").min=iso(now);$("date").max=iso(max);$("date").value=iso(now);
+$("date").addEventListener("change",renderSlots);
+$("form").hidden=true;$("subtitle").textContent="Chargement…";
+(fixed?db.doc("public/"+fixed).get().then(d=>d.exists?[d]:[]):db.collection("public").get().then(s=>s.docs)).then(docs=>{
+  docs.forEach(d=>{const x=d.data();if(x.active)VENUES[d.id]=x});
+  const ids=Object.keys(VENUES).sort((a,b)=>VENUES[a].name.localeCompare(VENUES[b].name,"fr"));
+  if(!ids.length){closed(fixed&&docs.length?"Les réservations en ligne sont fermées pour cet établissement. Merci d'appeler le restaurant.":"Aucune réservation en ligne n'est ouverte pour le moment.");return}
+  venue=ids[0];$("form").hidden=false;$("subtitle").textContent="Choisissez votre restaurant et votre créneau";
+  renderVenues();renderSlots();askConsent();
+}).catch(()=>closed("La page n'a pas pu se charger. Réessayez dans un instant ou appelez le restaurant."));
+</script>
+</body>
+</html>
