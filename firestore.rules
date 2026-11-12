@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Responsable : son adresse Google vérifiée. Lui seul gère la liste des accès.
+    function owner() {
+      return request.auth != null && request.auth.token.email == 'tounsiandre@gmail.com' && request.auth.token.email_verified == true;
+    }
+    // Équipe : adresse présente dans « access », avec le compte créé par le responsable ou une adresse vérifiée (Google).
+    function allowed() {
+      return request.auth != null && request.auth.token.email != null
+        && exists(/databases/$(database)/documents/access/$(request.auth.token.email))
+        && (get(/databases/$(database)/documents/access/$(request.auth.token.email)).data.uid == request.auth.uid
+            || request.auth.token.email_verified == true);
+    }
+    function staff() { return owner() || allowed(); }
+
+    match /access/{email} {
+      allow read, write: if owner();
+    }
+
+    // Fiche publique d'un établissement : lue par la page de réservation, modifiée par l'équipe.
+    match /public/{vid} {
+      allow read: if true;
+      allow write: if staff();
+    }
+
+    match /clients/{id} { allow read, write: if staff(); }
+    match /staff/{id} { allow read, write: if staff(); }
+
+    match /venues/{vid} {
+      allow read, write: if staff();
+      match /{sub}/{id} { allow read, write: if staff(); }
+
+      // Le public peut seulement déposer une demande de réservation « En attente ».
+      match /reservations/{rid} {
+        allow create: if
+          request.resource.data.keys().hasOnly(['name','phone','email','covers','date','time','table','pre','svc','status','source','tags','note','campaign','deposit','spend','walkin','duration','createdAt','web','clientId'])
+          && request.resource.data.keys().hasAll(['name','phone','email','covers','date','time','table','pre','svc','status','source','tags','note','campaign','deposit','spend','walkin','duration','createdAt','web','clientId'])
+          && request.resource.data.web == true
+          && request.resource.data.status == 'pending' && request.resource.data.pre == 'pending' && request.resource.data.svc == 'pending'
+          && request.resource.data.source == 'Site web' && request.resource.data.table == '' && request.resource.data.clientId == ''
+          && request.resource.data.deposit == 0 && request.resource.data.spend == 0 && request.resource.data.walkin == false
+          && request.resource.data.tags.size() == 0
+          && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 80
+          && request.resource.data.phone is string && request.resource.data.phone.size() >= 8 && request.resource.data.phone.size() <= 30
+          && request.resource.data.email is string && request.resource.data.email.size() <= 120
+          && request.resource.data.note is string && request.resource.data.note.size() <= 400
+          && request.resource.data.campaign is string && request.resource.data.campaign.size() <= 200
+          && request.resource.data.covers is int && request.resource.data.covers >= 1 && request.resource.data.covers <= 30
+          && request.resource.data.duration == 120
+          && request.resource.data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+          && request.resource.data.time.matches('^[0-9]{2}:[0-9]{2}$')
+          && request.resource.data.createdAt is string && request.resource.data.createdAt.size() <= 30
+          && get(/databases/$(database)/documents/public/$(vid)).data.active == true;
+      }
+    }
+  }
+}
