@@ -4,46 +4,73 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Réserver une table</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap">
 <style>
+/* Page de réservation : nuit marine, halos lents, carte en verre, accents or. Un seul thème, voulu. */
 :root{
-  --bg:#f4f6fa;--surface:#ffffff;--sunken:#eef1f7;--ink:#1b2333;--muted:#5d6880;--line:#d6dce8;
-  --accent:#2f5bd8;--accent-ink:#ffffff;--accent-soft:#e1e9fd;--danger:#b3372f;--danger-soft:#f7dcd9;
-  --display:"Bricolage Grotesque","Inter",system-ui,sans-serif;
-  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --bg:#0d1330;--ink:#f4efe4;--muted:#a9b0cb;--line:rgba(255,255,255,.14);--field:rgba(255,255,255,.07);
+  --gold:#e2b765;--gold-2:#c9982f;--navy:#0d1330;--danger:#ff9d94;
+  --display:"Fraunces",Georgia,serif;--body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px 90px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;width:100%;max-width:500px;padding:30px 26px;box-shadow:0 2px 12px rgba(20,30,60,.06)}
-h1{font-family:var(--display);font-weight:700;font-size:25px;text-align:center;letter-spacing:-.02em;text-wrap:balance}
-.subtitle{text-align:center;color:var(--muted);font-size:14px;margin:4px 0 26px}
-.field{margin-bottom:18px}
-label,.lab{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
-.req{color:var(--danger);margin-left:2px}
-input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--sunken);color:var(--ink);font:inherit;font-size:15px}
-input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-textarea{resize:vertical;min-height:70px}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:36px 16px 96px;position:relative;overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+body::before{width:520px;height:520px;left:-140px;top:-160px;background:#3a4aa0;opacity:.55;animation:drift1 18s ease-in-out infinite alternate}
+body::after{width:460px;height:460px;right:-140px;bottom:-140px;background:#a8752a;opacity:.38;animation:drift2 22s ease-in-out infinite alternate}
+.card{position:relative;z-index:1;width:100%;max-width:520px;padding:34px 28px 28px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(0,0,0,.45);animation:rise .7s var(--ease) both}
+.card::before{content:"RÉSERVATION";display:block;text-align:center;font-size:11px;font-weight:700;letter-spacing:.32em;color:var(--gold);margin-bottom:10px}
+h1{font-family:var(--display);font-weight:600;font-size:30px;line-height:1.15;text-align:center;letter-spacing:-.01em;text-wrap:balance}
+.subtitle{text-align:center;color:var(--muted);font-size:14px;margin:8px 0 26px}
+.subtitle::after{content:"";display:block;width:44px;height:2px;border-radius:2px;background:var(--gold);margin:16px auto 0;animation:grow .8s .3s var(--ease) both}
+.field{margin-bottom:18px;animation:rise .6s var(--ease) both}
+form>.field:nth-child(1){animation-delay:.08s}form>.row:nth-child(2) .field{animation-delay:.14s}form>.field:nth-child(3){animation-delay:.2s}form>.field:nth-child(4){animation-delay:.26s}form>.row:nth-child(5) .field{animation-delay:.32s}form>.field:nth-child(6){animation-delay:.38s}
+label,.lab{display:block;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.req{color:var(--gold);margin-left:2px}
+input,textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);font:inherit;font-size:16px;transition:border-color .2s,box-shadow .2s,background-color .2s}
+input::placeholder,textarea::placeholder{color:#7f87a6}
+input:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(226,183,101,.18);background:rgba(255,255,255,.1)}
+textarea{resize:vertical;min-height:76px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:420px){.row{grid-template-columns:1fr}}
+@media(max-width:440px){.row{grid-template-columns:1fr}.card{padding:28px 20px 22px}h1{font-size:26px}}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);background:var(--sunken);color:var(--ink);border-radius:8px;padding:9px 14px;font:inherit;font-size:14px;cursor:pointer;font-variant-numeric:tabular-nums}
-.chip:hover{border-color:var(--muted)}
-.chip.on{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:600}
-.grid .chip{min-height:50px;font-weight:600}
-.primary{display:block;width:100%;padding:13px;border:0;border-radius:10px;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:600;font-size:16px;cursor:pointer;margin-top:22px}
-.primary:disabled{opacity:.55;cursor:not-allowed}
-.msg{text-align:center;padding:30px 10px}
-.msg h2{font-family:var(--display);font-size:22px;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:999px;padding:10px 16px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;font-variant-numeric:tabular-nums;transition:transform .18s var(--ease),border-color .2s,background-color .2s,color .2s;animation:rise .4s var(--ease) both}
+.chip:hover{border-color:var(--gold);transform:translateY(-2px)}
+.chip:active{transform:scale(.94)}
+.chip.on{border-color:var(--gold);background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--navy);box-shadow:0 8px 20px rgba(226,183,101,.3);animation:pick .3s var(--ease)}
+.grid .chip{min-height:54px;border-radius:14px}
+.primary{position:relative;overflow:hidden;display:block;width:100%;padding:15px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--navy);font:inherit;font-weight:800;font-size:16px;letter-spacing:.01em;cursor:pointer;margin-top:24px;box-shadow:0 12px 30px rgba(226,183,101,.28);transition:transform .2s var(--ease),box-shadow .2s var(--ease);animation:rise .6s .44s var(--ease) both}
+.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:shine 3.6s 1.2s ease-in-out infinite}
+.primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(226,183,101,.38)}
+.primary:active{transform:scale(.98)}
+.primary:disabled{opacity:.7;cursor:progress;transform:none}
+.primary:disabled::after{animation:shine 1s linear infinite}
+.msg{text-align:center;padding:26px 6px 10px;animation:rise .6s var(--ease) both}
+.msg h2{font-family:var(--display);font-weight:600;font-size:26px;margin-bottom:10px}
 .msg p{color:var(--muted)}
-.err{background:var(--danger-soft);color:var(--danger);border-radius:8px;padding:10px 12px;margin-top:14px;font-size:14px}
+.msg #recap{color:var(--ink);font-weight:600}
+.tick{width:76px;height:76px;margin:0 auto 18px;display:block}
+.tick circle{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:214;stroke-dashoffset:214;animation:draw .7s var(--ease) forwards}
+.tick path{fill:none;stroke:var(--gold);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .45s .55s var(--ease) forwards}
+.err{background:rgba(255,120,110,.14);border:1px solid rgba(255,157,148,.4);color:var(--danger);border-radius:12px;padding:11px 13px;margin-top:14px;font-size:14px;animation:shake .35s}
 .muted{color:var(--muted);font-size:13px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-#consent{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:13px}
-#consent button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}
-#consent button.yes{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+#consent{position:fixed;z-index:2;left:0;right:0;bottom:0;background:rgba(13,19,48,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:12px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;font-size:13px;color:var(--muted);animation:rise .5s var(--ease) both}
+#consent button{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer}
+#consent button.yes{background:var(--gold);border-color:var(--gold);color:var(--navy)}
 [hidden]{display:none!important}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes pick{0%{transform:scale(.9)}60%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes shine{to{transform:translateX(120%)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes drift1{to{transform:translate(120px,90px) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-110px,-80px) scale(1.2)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.tick circle,.tick path{stroke-dashoffset:0}}
 </style>
 </head>
 <body>
@@ -195,7 +222,7 @@ $("form").addEventListener("submit",async e=>{
     if(!$("website").value)await db.collection("venues/"+venue+"/reservations").add(d);   // champ piège : rempli seulement par les robots
     trackBooking({venueName:v.name,covers:d.covers});
     const when=new Date(d.date+"T12:00:00").toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
-    $("card").innerHTML='<div class="msg"><h2>Demande envoyée</h2><p id="recap"></p><p style="margin-top:12px">Le restaurant vous appelle pour confirmer votre table.</p></div>';
+    $("card").innerHTML='<div class="msg"><svg class="tick" viewBox="0 0 76 76" aria-hidden="true"><circle cx="38" cy="38" r="34"/><path d="M24 39l10 10 19-21"/></svg><h2>Demande envoyée</h2><p id="recap"></p><p style="margin-top:12px">Le restaurant vous appelle pour confirmer votre table.</p></div>';
     $("recap").textContent=v.name+" — "+when+" à "+d.time+" — "+d.covers+" personne"+(d.covers>1?"s":"");
   }catch(x){btn.disabled=false;btn.textContent="Envoyer ma demande de réservation";fail("L'envoi n'a pas abouti. Réessayez ou appelez directement le restaurant.")}
 });
