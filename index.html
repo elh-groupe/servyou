@@ -210,6 +210,13 @@ body::after{width:540px;height:540px;right:-160px;bottom:-180px;background:#a875
 .top h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:34px;letter-spacing:-.01em;line-height:1}
 .top h1::after{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--gold);margin-left:6px;animation:pulse 2.4s ease-in-out infinite}
 .top .tag{font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-top:8px}
+#who{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--ink);animation:rise .6s .2s var(--ease) both;transition:border-color .2s,transform .2s var(--ease)}
+#who:empty{display:none}
+#who:hover{border-color:var(--gold);transform:translateY(-1px)}
+.ava{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#0d1330;font-weight:800;font-size:14px;letter-spacing:.02em;box-shadow:0 0 0 0 rgba(226,183,101,.5);animation:halo 2.8s ease-out infinite}
+.uname{display:flex;flex-direction:column;line-height:1.15;font-weight:700;font-size:14px}
+.uname small{font-weight:600;font-size:11px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}
+@keyframes halo{0%{box-shadow:0 0 0 0 rgba(226,183,101,.5)}70%,100%{box-shadow:0 0 0 10px rgba(226,183,101,0)}}
 /* boutons */
 .btn{border-radius:999px;background:rgba(255,255,255,.07);border-color:var(--line);color:var(--ink);font-weight:600;transition:transform .18s var(--ease),box-shadow .2s var(--ease),background-color .2s,border-color .2s,color .2s}
 .btn:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 8px 20px rgba(0,0,0,.3)}
@@ -417,12 +424,22 @@ async function resolveNames(){
   try{const ps=await user.profiles(ids);ids.forEach(i=>names[i]=(ps&&ps[i]&&ps[i].name)||"");if(ui.view==="journal"&&!E)paint()}catch(e){}
 }
 function setVenue(id){ vid=id; try{localStorage.setItem("cds-venue",id)}catch(e){} ui.sel=null;ui.sec=0;ui.setSec=0;ui.shift="";ui.rshift="";E=null; subVenue(); mount() }
+/* Profil affiché dans la bannière : pastille aux initiales, nom, adresse au survol. */
+function showWho(u){
+  const w=$("#who");w.textContent="";if(!u)return;
+  const mail=String(u.email||"").toLowerCase(),name=mail===OWNER?"Andre Tounsi":(u.displayName||mail.split("@")[0]||"Compte");
+  const ini=name.split(/[\s._-]+/).filter(Boolean).slice(0,2).map(x=>x[0].toUpperCase()).join("")||"?";
+  const a=document.createElement("span");a.className="ava";a.textContent=ini;a.setAttribute("aria-hidden","true");
+  const n=document.createElement("span");n.className="uname";n.textContent=name;
+  const r=document.createElement("small");r.textContent=mail===OWNER?"Responsable":"Équipe";n.appendChild(r);
+  w.title=mail;w.append(a,n);
+}
 function boot(){
   mount();
   firebase.initializeApp(FB);
   const auth=firebase.auth();
   auth.onAuthStateChanged(u=>{
-    $("#login").hidden=!!u;$("#who").textContent=u?u.email:"";$("#outBtn").hidden=!u;
+    $("#login").hidden=!!u;showWho(u);$("#outBtn").hidden=!u;
     if(!u)return;
     me=String(u.email||u.uid).toLowerCase();
     if(!db){db=firebase.firestore();start()}
