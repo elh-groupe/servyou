@@ -297,7 +297,7 @@ function subVenue(){
   if(!db||!vid)return;
   const ko=()=>{};
   unsubs.push(db.doc("public/"+vid).onSnapshot(d=>{pub=d.exists?d.data():null;if(ui.view==="reglages"&&!E)paint()},ko));
-  unsubs.push(db.collection(path("reservations")).onSnapshot(s=>{if(resLoaded)s.docChanges().forEach(c=>{const d=c.doc.data();if(c.type==="added"&&d.web)toast("Nouvelle réservation en ligne : "+d.name+", "+d.date+" "+d.time)});resLoaded=true;res=s.docs.map(d=>Object.assign({id:d.id},d.data()));if(!E)paint()},ko));
+  unsubs.push(db.collection(path("reservations")).onSnapshot(s=>{if(resLoaded)s.docChanges().forEach(c=>{const d=c.doc.data();if(c.type==="added"&&d.web)toast("Nouvelle réservation en ligne : "+d.name+", "+d.date+" "+d.time)});resLoaded=true;res=s.docs.map(d=>Object.assign({id:d.id},d.data()));linkWeb();if(!E)paint()},ko));
   unsubs.push(db.collection(path("menu")).onSnapshot(s=>{menu=s.docs.map(d=>Object.assign({id:d.id},d.data()));if(ui.view==="carte"&&!E)paint()},ko));
   unsubs.push(db.collection(path("logs")).orderBy("at","desc").limit(200).onSnapshot(s=>{logs=s.docs.map(d=>Object.assign({id:d.id},d.data()));resolveNames();if(ui.view==="journal"&&!E)paint()},ko));
 }
@@ -324,6 +324,17 @@ function boot(){
     auth.sendPasswordResetEmail(m).then(()=>er("Si ce compte existe, un e-mail de réinitialisation vient d'être envoyé."),()=>er("Envoi impossible. Vérifiez l'adresse."))});
   $("#outBtn").addEventListener("click",()=>auth.signOut().then(()=>location.reload()));
 }
+/* Une réservation en ligne arrive sans fiche client : on la rattache à la fiche du même téléphone, ou on la crée. */
+let cliLoaded=false;const linking={};
+function linkWeb(){
+  if(!cliLoaded||!db||!vid)return;const v=vid;
+  res.filter(r=>r.web&&!r.clientId&&!linking[r.id]).forEach(r=>{
+    const ph=digits(r.phone);if(ph.length<8)return;linking[r.id]=1;
+    const c=clients.find(c=>digits(c.phone)===ph),cid=c?c.id:"tel-"+ph;
+    (c?Promise.resolve():db.doc("clients/"+cid).set({name:r.name,phone:r.phone,email:r.email||"",tags:[],note:"",createdAt:new Date().toISOString()}))
+      .then(()=>db.doc("venues/"+v+"/reservations/"+r.id).update({clientId:cid})).catch(()=>{delete linking[r.id]});
+  });
+}
 function start(){
   const timer=setTimeout(()=>note("Les données ne répondent pas encore. L'affichage peut être incomplet."),10000);
   const ko=e=>{clearTimeout(timer);if(e&&e.code==="permission-denied"){note("");$("#nav").innerHTML="";$("#bar").innerHTML="";$("#body").innerHTML='<div class="empty">Le compte '+esc(me)+" n'a pas accès à servYou. Demandez au responsable de vous ajouter dans Équipe, ou déconnectez-vous pour changer de compte.</div>"}else note("Les données ne sont plus accessibles sur cette page.")};
@@ -334,7 +345,7 @@ function start(){
     if(!vid||!V()){ let saved=null; try{saved=localStorage.getItem("cds-venue")}catch(e){} const v=venues.find(v=>v.id===saved)||venues[0]; if(v){setVenue(v.id);return} }
     mount();
   },ko);
-  db.collection("clients").onSnapshot(s=>{clients=s.docs.map(d=>Object.assign({id:d.id},d.data()));if((ui.view==="clients"||ui.view==="statistiques")&&!E)paint()},()=>{});
+  db.collection("clients").onSnapshot(s=>{clients=s.docs.map(d=>Object.assign({id:d.id},d.data()));cliLoaded=true;linkWeb();if((ui.view==="clients"||ui.view==="statistiques")&&!E)paint()},()=>{});
   db.collection("staff").onSnapshot(s=>{staff=s.docs.map(d=>Object.assign({id:d.id},d.data()));if(ui.view==="equipe"&&!E)paint()},()=>{});
 }
 
