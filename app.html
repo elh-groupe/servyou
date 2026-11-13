@@ -413,9 +413,10 @@ const ui={view:"reservations",day:today,q:"",tab:"toutes",sec:0,sel:null,month:t
 let E=null,F=null,confirmDel=false,CS={},EXP=null,dl=null;
 const P=Object.assign({sortBy:"time",sortDir:"asc",defTime:"20:00",stay:false,mcols:["date","time","name","phone","covers","table","status","source","spend"]},(()=>{try{return JSON.parse(localStorage.getItem("cds-prefs"))||{}}catch(e){return{}}})());
 const THEMES=[["vert","Vert","linear-gradient(135deg,#1c2b2a 55%,#eef0f0 55%)"],["blanc","Blanc","linear-gradient(135deg,#f2f5f4 55%,#1f4a45 55%)"],["gold","Gold","linear-gradient(135deg,#17130d 55%,#e6c079 55%)"],["nuit","Nuit","linear-gradient(135deg,#0d1330 55%,#e8ecff 55%)"]];
-function setTheme(k){if(!THEMES.some(t=>t[0]===k))k="vert";if(k==="vert")delete document.documentElement.dataset.th;else document.documentElement.dataset.th=k;try{localStorage.setItem("srv-theme",k)}catch(e){}}
+function setTheme(k){if(!THEMES.some(t=>t[0]===k))k="blanc";if(k==="vert")delete document.documentElement.dataset.th;else document.documentElement.dataset.th=k;try{localStorage.setItem("srv-theme",k)}catch(e){}}
 const theme=()=>document.documentElement.dataset.th||"vert";
-try{setTheme(localStorage.getItem("srv-theme")||"vert")}catch(e){}
+let th0="blanc";try{th0=localStorage.getItem("srv-theme")||"blanc"}catch(e){}
+setTheme(th0);
 const saveP=()=>{try{localStorage.setItem("cds-prefs",JSON.stringify(P))}catch(e){}};
 const money=n=>(Math.round((+n||0)*100)/100).toLocaleString("fr-FR",{maximumFractionDigits:2});
 const pct=(a,b)=>b?Math.round(100*a/b)+" %":"–";
