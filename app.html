@@ -187,25 +187,25 @@ body{margin:0}
 
 /* ===== Habillage Servioresa : même univers que la page de réservation (nuit marine, verre, or), bannière animée ===== */
 :root{
-  --bg:#0d1330; --surface:#182049; --sunken:#111839; --ink:#f4efe4; --muted:#a9b0cb; --line:#2d3766;
-  --accent:#e2b765; --accent-ink:#0d1330; --accent-soft:rgba(226,183,101,.16); --gold:#e2b765; --gold-2:#c9982f;
+  --bg:#1c2b2a; --surface:#243a39; --sunken:#1a2928; --ink:#f4efe4; --muted:#a9bab7; --line:#3a5351;
+  --accent:#eef0f0; --accent-ink:#16211f; --accent-soft:rgba(225,231,231,.16); --gold:#eef0f0; --gold-2:#b4bdbe;
   --reserve:#f0c36d; --reserve-soft:#3d3217; --occupe:#9db3ff; --occupe-soft:#22306a;
-  --danger:#ff9d94; --danger-soft:#4a2320; --decor:#3b467a;
-  --s1:#e2b765; --s2:#9db3ff; --s3:#5fc9bd; --s4:#ff8f85; --s5:#c3a2ef;
-  --side:#0a0f27; --side-ink:#aab2cf; --side-on:#ffffff; --side-hi:#232c5a;
+  --danger:#ff9d94; --danger-soft:#4a2320; --decor:#4a6361;
+  --s1:#eef0f0; --s2:#9db3ff; --s3:#5fc9bd; --s4:#ff8f85; --s5:#c3a2ef;
+  --side:#152120; --side-ink:#a9bab7; --side-on:#ffffff; --side-hi:#2f4b49;
   --display:"Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1); color-scheme:dark;
 }
 html{background:var(--bg)}
 body{font-feature-settings:"tnum" 1;position:relative;overflow-x:hidden}
 body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
-body::before{width:620px;height:620px;left:-180px;top:-200px;background:#3a4aa0;opacity:.45;animation:drift1 20s ease-in-out infinite alternate}
-body::after{width:540px;height:540px;right:-160px;bottom:-180px;background:#a8752a;opacity:.28;animation:drift2 24s ease-in-out infinite alternate}
+body::before{width:620px;height:620px;left:-180px;top:-200px;background:#3f6f69;opacity:.45;animation:drift1 20s ease-in-out infinite alternate}
+body::after{width:540px;height:540px;right:-160px;bottom:-180px;background:#7d8f90;opacity:.28;animation:drift2 24s ease-in-out infinite alternate}
 .wrap{position:relative;z-index:1}
 /* bannière */
-.top{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:22px 26px;background:linear-gradient(120deg,#1b2456,#2a2f6b 35%,#5a4420 70%,#1b2456);background-size:300% 100%;animation:bannerMove 16s ease-in-out infinite alternate,rise .7s var(--ease) both;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.top{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:22px 26px;background:linear-gradient(120deg,#22383a,#2f5450 35%,#56686a 70%,#22383a);background-size:300% 100%;animation:bannerMove 16s ease-in-out infinite alternate,rise .7s var(--ease) both;box-shadow:0 24px 60px rgba(0,0,0,.4)}
 .top::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.14) 50%,transparent 60%);transform:translateX(-120%);animation:shine 6s 1s ease-in-out infinite;pointer-events:none}
-.top::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:18%;top:-120px;background:radial-gradient(circle,rgba(226,183,101,.5),transparent 65%);animation:float 9s ease-in-out infinite alternate;pointer-events:none}
+.top::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:18%;top:-120px;background:radial-gradient(circle,rgba(225,231,231,.5),transparent 65%);animation:float 9s ease-in-out infinite alternate;pointer-events:none}
 .top>*{position:relative;z-index:1}
 .top h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:34px;letter-spacing:-.01em;line-height:1}
 .brand{height:54px;width:auto;display:block}
@@ -214,18 +214,18 @@ body::after{width:540px;height:540px;right:-160px;bottom:-180px;background:#a875
 #who{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--ink);animation:rise .6s .2s var(--ease) both;transition:border-color .2s,transform .2s var(--ease)}
 #who:empty{display:none}
 #who:hover{border-color:var(--gold);transform:translateY(-1px)}
-.ava{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#0d1330;font-weight:800;font-size:14px;letter-spacing:.02em;box-shadow:0 0 0 0 rgba(226,183,101,.5);animation:halo 2.8s ease-out infinite}
+.ava{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16211f;font-weight:800;font-size:14px;letter-spacing:.02em;box-shadow:0 0 0 0 rgba(225,231,231,.5);animation:halo 2.8s ease-out infinite}
 .uname{display:flex;flex-direction:column;line-height:1.15;font-weight:700;font-size:14px}
 .uname small{font-weight:600;font-size:11px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}
-@keyframes halo{0%{box-shadow:0 0 0 0 rgba(226,183,101,.5)}70%,100%{box-shadow:0 0 0 10px rgba(226,183,101,0)}}
+@keyframes halo{0%{box-shadow:0 0 0 0 rgba(225,231,231,.5)}70%,100%{box-shadow:0 0 0 10px rgba(225,231,231,0)}}
 /* boutons */
 .btn{border-radius:999px;background:rgba(255,255,255,.07);border-color:var(--line);color:var(--ink);font-weight:600;transition:transform .18s var(--ease),box-shadow .2s var(--ease),background-color .2s,border-color .2s,color .2s}
 .btn:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 8px 20px rgba(0,0,0,.3)}
 .btn:active{transform:scale(.95);box-shadow:none}
-.btn.primary{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#0d1330;font-weight:800;box-shadow:0 10px 26px rgba(226,183,101,.28)}
+.btn.primary{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#16211f;font-weight:800;box-shadow:0 10px 26px rgba(225,231,231,.28)}
 .btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:shine 3.8s 1.2s ease-in-out infinite}
-.btn.primary:hover{box-shadow:0 14px 32px rgba(226,183,101,.4)}
-.btn.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#0d1330;animation:pick .3s var(--ease)}
+.btn.primary:hover{box-shadow:0 14px 32px rgba(225,231,231,.4)}
+.btn.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#16211f;animation:pick .3s var(--ease)}
 .btn.danger{color:var(--danger);border-color:rgba(255,157,148,.45)}
 /* surfaces en verre */
 .card,.stat,.pane>.card{border-radius:18px}
@@ -233,29 +233,29 @@ body::after{width:540px;height:540px;right:-160px;bottom:-180px;background:#a875
 table.data{background:transparent;border:0;backdrop-filter:none}
 .scroll{border-radius:18px;overflow:auto}
 .card{box-shadow:0 18px 44px rgba(0,0,0,.28);transition:box-shadow .25s var(--ease),transform .25s var(--ease),border-color .25s}
-.card:hover{border-color:rgba(226,183,101,.4)}
+.card:hover{border-color:rgba(225,231,231,.4)}
 .stats b{font-size:28px;font-weight:800;letter-spacing:-.02em;color:var(--gold)}
 .tabs{background:transparent;gap:8px;overflow:visible}
 .tabb{border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.05);color:var(--ink);transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s,background-color .2s;position:relative}
 .tabb:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 10px 24px rgba(0,0,0,.3)}
-.tabb.on{border-color:var(--gold);background:rgba(226,183,101,.14);box-shadow:0 10px 26px rgba(226,183,101,.16)}
+.tabb.on{border-color:var(--gold);background:rgba(225,231,231,.14);box-shadow:0 10px 26px rgba(225,231,231,.16)}
 .tabb.on::after{content:"";position:absolute;left:16px;right:16px;bottom:-1px;height:3px;border-radius:3px;background:var(--gold);animation:grow .35s var(--ease)}
 .tabb b{font-weight:800}
 table.data th{color:var(--gold);letter-spacing:.08em}
 table.data tbody tr{transition:background-color .15s}
-table.data tbody tr:hover{background:rgba(226,183,101,.08)}
+table.data tbody tr:hover{background:rgba(225,231,231,.08)}
 table.data tr.web td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
 table.data tr.web .time::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-left:8px;vertical-align:middle;animation:pulse 1.6s ease-in-out infinite}
 .pill{border-radius:999px;font-weight:600}
-.tchip{background:rgba(226,183,101,.16);color:var(--gold);border:1px solid rgba(226,183,101,.35);border-radius:10px}
+.tchip{background:rgba(225,231,231,.16);color:var(--gold);border:1px solid rgba(225,231,231,.35);border-radius:10px}
 input,select,textarea{background:rgba(255,255,255,.07);border-color:var(--line);color:var(--ink);border-radius:12px;transition:border-color .15s,box-shadow .15s,background-color .15s}
-select option{background:#182049;color:#f4efe4}
-input::placeholder,textarea::placeholder{color:#7f87a6}
-input:focus,select:focus,textarea:focus{border-color:var(--gold)!important;box-shadow:0 0 0 4px rgba(226,183,101,.18)!important;outline:none}
-#toast{border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#0d1330;font-weight:700;box-shadow:0 14px 34px rgba(0,0,0,.4);animation:toastIn .35s var(--ease)}
-dialog{background:#141b40;color:var(--ink);border:1px solid rgba(255,255,255,.14)}
+select option{background:#243a39;color:#f4efe4}
+input::placeholder,textarea::placeholder{color:#8a9c99}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)!important;box-shadow:0 0 0 4px rgba(225,231,231,.18)!important;outline:none}
+#toast{border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16211f;font-weight:700;box-shadow:0 14px 34px rgba(0,0,0,.4);animation:toastIn .35s var(--ease)}
+dialog{background:#1f3231;color:var(--ink);border:1px solid rgba(255,255,255,.14)}
 dialog[open]{animation:pop .28s var(--ease);border-radius:20px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
-dialog::backdrop{background:rgba(6,9,26,.6);backdrop-filter:blur(4px);animation:fade .25s}
+dialog::backdrop{background:rgba(10,17,16,.6);backdrop-filter:blur(4px);animation:fade .25s}
 #bar{animation:rise .5s .1s var(--ease) both}
 #body.enter>*{animation:rise .5s var(--ease) both}
 #body.enter>*:nth-child(2){animation-delay:.06s}#body.enter>*:nth-child(3){animation-delay:.12s}#body.enter>*:nth-child(4){animation-delay:.18s}#body.enter>*:nth-child(n+5){animation-delay:.24s}
@@ -267,26 +267,26 @@ dialog::backdrop{background:rgba(6,9,26,.6);backdrop-filter:blur(4px);animation:
 #body.enter table.data tbody tr:nth-child(2){animation-delay:.04s}#body.enter table.data tbody tr:nth-child(3){animation-delay:.08s}#body.enter table.data tbody tr:nth-child(4){animation-delay:.12s}#body.enter table.data tbody tr:nth-child(n+5){animation-delay:.16s}
 #body.enter svg.chart rect{transform-box:fill-box;transform-origin:bottom;animation:barUp .7s var(--ease) both}
 .tg button,.ps button,.mc button{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink);border-radius:10px;transition:transform .15s var(--ease),background-color .15s,border-color .15s}
-.tg button:hover,.ps button:hover,.mc button:hover{background:rgba(226,183,101,.14);border-color:var(--gold);transform:translateY(-1px)}
+.tg button:hover,.ps button:hover,.mc button:hover{background:rgba(225,231,231,.14);border-color:var(--gold);transform:translateY(-1px)}
 .tg button:active,.ps button:active{transform:scale(.94)}
-.tg button.on,.ps button.on,.mc button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#0d1330;animation:pick .25s var(--ease)}
+.tg button.on,.ps button.on,.mc button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#16211f;animation:pick .25s var(--ease)}
 .mc button{background:transparent;border-color:transparent}
 .gr{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink);transition:transform .15s var(--ease),border-color .15s}
 .gr:hover{transform:translateX(3px)}
-#login{background:radial-gradient(900px 520px at 12% 8%,#35449a 0,transparent 60%),radial-gradient(760px 520px at 92% 92%,#7a5a22 0,transparent 55%),#0d1330}
+#login{background:radial-gradient(900px 520px at 12% 8%,#3f6f69 0,transparent 60%),radial-gradient(760px 520px at 92% 92%,#6f8082 0,transparent 55%),#16211f}
 #login form{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14);border-radius:24px;backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(0,0,0,.5);animation:rise .7s var(--ease) both}
 #login h1{font-family:"Fraunces",Georgia,serif;font-size:38px}
 #login form::before{content:"ESPACE ÉQUIPE";text-align:center;font-size:11px;font-weight:700;letter-spacing:.32em;color:var(--gold)}
 @media (min-width:1000px){
   nav{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,0,0,.35);border-radius:20px;animation:rise .6s .05s var(--ease) both}
   nav a{transition:background-color .2s,color .2s,transform .2s var(--ease)}
-  nav a:hover{transform:scale(1.12);color:var(--gold);background:rgba(226,183,101,.12)}
-  nav a.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#0d1330;box-shadow:0 8px 20px rgba(226,183,101,.3)}
+  nav a:hover{transform:scale(1.12);color:var(--gold);background:rgba(225,231,231,.12)}
+  nav a.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16211f;box-shadow:0 8px 20px rgba(225,231,231,.3)}
   .ni:hover .fly,.ni:focus-within .fly{animation:flyIn .22s var(--ease) both}
-  .fly>div{background:#141b40;border:1px solid #2d3766;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  .fly>div{background:#1f3231;border:1px solid #3a5351;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
   .fly button{transition:background-color .15s,padding-left .2s var(--ease),color .15s}
   .fly button:hover{padding-left:16px;color:var(--gold)}
-  .fly button.on{background:rgba(226,183,101,.16);color:var(--gold)}
+  .fly button.on{background:rgba(225,231,231,.16);color:var(--gold)}
 }
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
