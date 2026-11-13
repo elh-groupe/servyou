@@ -142,7 +142,7 @@ const mins=t=>{const a=String(t).split(":").map(Number);return a[0]*60+(a[1]||0)
 const qs=new URLSearchParams(location.search);
 // Lien propre à un établissement : reserver.html?r=identifiant. Sans identifiant, le client choisit.
 const fixed=(qs.get("r")||location.hash.slice(1)||"").replace(/[^a-z0-9-]/gi,"").slice(0,40);
-let VENUES={},venue="",time="",tracked=false;
+let VENUES={},venue="",time="",tracked=false,linkLabel="";
 // Campagne d'origine, gardée avec la réservation
 const campaign=["utm_source","utm_medium","utm_campaign","utm_content","fbclid","gclid"].filter(k=>qs.get(k)).map(k=>k+"="+(k.endsWith("clid")?"oui":qs.get(k).slice(0,40))).join(" ").slice(0,200);
 
@@ -170,7 +170,7 @@ function renderSlots(){
   });
   if(!list.includes(time))time="";
   if(!list.length){box.innerHTML='<span class="muted">Aucun créneau en ligne ce jour-là. Choisissez une autre date ou appelez le restaurant.</span>';return}
-  list.forEach(t=>{const b=document.createElement("button");b.type="button";b.className="chip"+(t===time?" on":"");b.textContent=t;b.addEventListener("click",()=>{time=t;renderSlots()});box.appendChild(b)});
+  list.forEach(t=>{const b=document.createElement("button");b.type="button";b.className="chip"+(t===time?" on":"");b.textContent=t;b.addEventListener("click",()=>{time=t;renderSlots();trackAct("creneau")});box.appendChild(b)});
 }
 
 /* ---------- suivi des campagnes : chargé seulement après accord du visiteur ---------- */
@@ -190,26 +190,33 @@ function loadTags(){
   if(/^\d{5,20}$/.test(c.pixel||"")){                       // Meta Pixel
     const n=window.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     window._fbq=n;n.push=n;n.loaded=true;n.version="2.0";n.queue=[];
-    script("https://connect.facebook.net/en_US/fbevents.js");fbq("init",c.pixel);fbq("track","PageView")}
+    script("https://connect.facebook.net/en_US/fbevents.js");fbq("init",c.pixel);fbq("track","PageView");fbq("track","ViewContent",{content_name:c.name,content_category:"reservation"})}
   if(/^(G|AW|GT)-[A-Za-z0-9-]{4,30}$/.test(c.gtag||"")){     // Google tag (Analytics 4 ou Google Ads)
     window.gtag=function(){dataLayer.push(arguments)};
     script("https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(c.gtag));gtag("js",new Date());gtag("config",c.gtag)}
   if(/^GTM-[A-Za-z0-9]{4,12}$/.test(c.gtm||"")){             // Google Tag Manager
     dataLayer.push({"gtm.start":Date.now(),event:"gtm.js"});script("https://www.googletagmanager.com/gtm.js?id="+encodeURIComponent(c.gtm))}
 }
+/* Actions suivies : choix d'un créneau, clic sur le bouton Réserver, puis réservation envoyée (trackBooking). */
+function trackAct(kind){
+  if(!tracked)return;const n=(VENUES[venue]||{}).name||"";
+  try{if(kind==="clic"){if(window.fbq)fbq("track","InitiateCheckout",{content_name:n,content_category:"reservation"});if(window.gtag)gtag("event","begin_checkout",{restaurant:n});dataLayer.push({event:"clic_reserver",restaurant:n})}
+    else{if(window.fbq)fbq("trackCustom","ChoixCreneau",{content_name:n});if(window.gtag)gtag("event","select_item",{restaurant:n});dataLayer.push({event:"choix_creneau",restaurant:n})}}catch(e){}
+}
 function trackBooking(d){
   if(!tracked)return;
-  try{if(window.fbq)fbq("track","Schedule",{content_name:d.venueName,num_guests:d.covers});
+  try{if(window.fbq){fbq("track","Schedule",{content_name:d.venueName,num_guests:d.covers});fbq("track","Lead",{content_name:d.venueName})}
     if(window.gtag)gtag("event","generate_lead",{restaurant:d.venueName,couverts:d.covers});
     dataLayer.push({event:"reservation_envoyee",restaurant:d.venueName,couverts:d.covers})}catch(e){}
 }
 
 /* ---------- envoi ---------- */
+$("send").addEventListener("click",()=>trackAct("clic"));
 $("form").addEventListener("submit",async e=>{
   e.preventDefault();
   const v=VENUES[venue];if(!v)return;
   const d={name:$("name").value.trim().slice(0,80),phone:$("phone").value.trim().slice(0,30),email:$("email").value.trim().slice(0,120),covers:parseInt($("guests").value,10)||0,date:$("date").value,time,
-    table:"",pre:"pending",svc:"pending",status:"pending",source:"Site web",tags:[],note:$("notes").value.trim().slice(0,400),campaign,deposit:0,spend:0,walkin:false,duration:120,createdAt:new Date().toISOString(),web:true,clientId:""};
+    table:"",pre:"pending",svc:"pending",status:"pending",source:"Site web",tags:[],note:$("notes").value.trim().slice(0,400),campaign:((linkLabel?"lien="+linkLabel+" ":"")+campaign).trim().slice(0,200),deposit:0,spend:0,walkin:false,duration:120,createdAt:new Date().toISOString(),web:true,clientId:""};
   if(!d.date)return fail("Choisissez une date.");
   if(!d.time)return fail("Choisissez une heure.");
   if(d.covers<1)return fail("Indiquez le nombre de personnes.");
@@ -232,7 +239,10 @@ const now=new Date(),max=new Date();max.setDate(max.getDate()+60);
 $("date").min=iso(now);$("date").max=iso(max);$("date").value=iso(now);
 $("date").addEventListener("change",renderSlots);
 $("form").hidden=true;$("subtitle").textContent="Chargement…";
-(fixed?db.doc("public/"+fixed).get().then(d=>d.exists?[d]:[]):Promise.resolve([])).then(docs=>{
+/* Un lien personnalisé (alias) renvoie vers la fiche de son établissement. */
+(fixed?db.doc("public/"+fixed).get().then(d=>{if(!d.exists)return [];const x=d.data();
+  if(x.alias&&/^[a-z0-9-]{1,40}$/i.test(x.venue||"")){linkLabel=String(x.label||fixed).slice(0,40);return db.doc("public/"+x.venue).get().then(v=>v.exists?[v]:[])}
+  return [d]}):Promise.resolve([])).then(docs=>{
   docs.forEach(d=>{const x=d.data();if(x.active)VENUES[d.id]=x});
   const ids=Object.keys(VENUES).sort((a,b)=>VENUES[a].name.localeCompare(VENUES[b].name,"fr"));
   if(!ids.length){closed(fixed&&docs.length?"Les réservations en ligne sont fermées pour cet établissement. Merci d'appeler le restaurant.":"Ce lien de réservation est incomplet. Utilisez le lien communiqué par votre restaurant.");return}
