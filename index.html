@@ -424,13 +424,19 @@ if(l0==="en")setLang("en");
   v.addEventListener("timeupdate",()=>{const t=v.currentTime;show(t<3.2?0:t<6.2?1:2)});
   v.addEventListener("ended",()=>setTimeout(close,700));
   v.addEventListener("error",close);
-  b.addEventListener("click",()=>{v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play().catch(()=>{})}b.setAttribute("aria-pressed",String(!v.muted));sp.dataset.t=v.muted?"v5":"v6";sp.textContent=(lang==="en"?EN:FR)[sp.dataset.t]});
+  const sync=()=>{b.setAttribute("aria-pressed",String(!v.muted));sp.dataset.t=v.muted?"v5":"v6";sp.textContent=(lang==="en"?EN:FR)[sp.dataset.t]};
+  b.addEventListener("click",e=>{e.stopPropagation();v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play().catch(()=>{})}sync()});
   document.getElementById("vclose").addEventListener("click",close);
   box.addEventListener("click",e=>{if(e.target===box)close()});
   box.querySelector("a.btn").addEventListener("click",close);
   document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
   box.hidden=false;document.documentElement.style.overflow="hidden";v.src=v.dataset.src;
-  const p=v.play();if(p&&p.catch)p.catch(()=>{});
+  /* son activé d'office. Si le navigateur refuse le son sans geste du visiteur, la vidéo part en muet
+     et le son s'active tout seul au premier clic, toucher ou appui de touche, en reprenant du début. */
+  v.muted=false;sync();
+  const first=()=>{if(gone||!v.muted)return;v.muted=false;v.currentTime=0;v.play().catch(()=>{});sync()};
+  const arm=()=>["pointerdown","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,first,{once:true,capture:true}));
+  const p=v.play();if(p&&p.catch)p.catch(()=>{v.muted=true;sync();arm();const q=v.play();if(q&&q.catch)q.catch(()=>{})});
   setTimeout(()=>{if(!gone&&v.currentTime<.2&&v.paused)close()},6000);   /* si la lecture ne démarre pas, on ne bloque pas le visiteur */
 })();
 /* bandeau défilant : le contenu est doublé pour boucler sans saut */
