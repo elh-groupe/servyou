@@ -288,7 +288,7 @@ h1 em,.jnum,.price em{background:linear-gradient(100deg,var(--g1) 10%,var(--g2) 
 </div>
 
 <div class="vid"><div class="in"><div class="vbox rv">
-  <video id="promo" src="promo.mp4" poster="promo.jpg" autoplay muted loop playsinline preload="metadata"></video>
+  <video id="promo" src="promo.mp4" poster="promo.jpg" autoplay muted playsinline preload="metadata"></video>
   <div class="vshade"></div>
   <div class="vtxt">
     <p class="eyebrow" data-t="v0">Servioresa en 10 secondes</p>
@@ -410,6 +410,9 @@ if(l0==="en")setLang("en");
   const show=i=>{ls.forEach((l,k)=>l.classList.toggle("on",k===i));bs.forEach((x,k)=>x.classList.toggle("on",k===i))};show(0);
   v.addEventListener("timeupdate",()=>{const t=v.currentTime;show(t<3.2?0:t<6.2?1:2)});
   b.addEventListener("click",()=>{v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play().catch(()=>{})}b.setAttribute("aria-pressed",String(!v.muted));sp.dataset.t=v.muted?"v5":"v6";sp.textContent=(lang==="en"?EN:FR)[sp.dataset.t]});
+  /* une seule lecture : à la fin, l'image reste sur la tablette ; un clic sur la vidéo la relance */
+  v.addEventListener("ended",()=>show(2));
+  v.addEventListener("click",()=>{if(v.ended||v.paused){v.currentTime=0;v.play().catch(()=>{})}});
   const p=v.play();if(p&&p.catch)p.catch(()=>{});
 })();
 /* bandeau défilant : le contenu est doublé pour boucler sans saut */
