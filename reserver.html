@@ -175,11 +175,7 @@ function renderSlots(){
 
 /* ---------- suivi des campagnes : chargé seulement après accord du visiteur ---------- */
 const hasTags=()=>{const c=VENUES[venue]||{};return !!(c.pixel||c.gtag||c.gtm)};
-function askConsent(){
-  if(!hasTags()||tracked)return;
-  let v="";try{v=localStorage.getItem("resa-consent")||""}catch(e){}
-  if(v==="oui")loadTags();else if(v!=="non")$("consent").hidden=false;
-}
+function askConsent(){ if(hasTags()&&!tracked)loadTags() }   // suivi chargé dès l'ouverture de la page, sans bandeau (choix du responsable)
 function setConsent(v){try{localStorage.setItem("resa-consent",v)}catch(e){}$("consent").hidden=true;if(v==="oui")loadTags()}
 $("cYes").addEventListener("click",()=>setConsent("oui"));
 $("cNo").addEventListener("click",()=>setConsent("non"));
