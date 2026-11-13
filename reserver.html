@@ -232,10 +232,10 @@ const now=new Date(),max=new Date();max.setDate(max.getDate()+60);
 $("date").min=iso(now);$("date").max=iso(max);$("date").value=iso(now);
 $("date").addEventListener("change",renderSlots);
 $("form").hidden=true;$("subtitle").textContent="Chargement…";
-(fixed?db.doc("public/"+fixed).get().then(d=>d.exists?[d]:[]):db.collection("public").get().then(s=>s.docs)).then(docs=>{
+(fixed?db.doc("public/"+fixed).get().then(d=>d.exists?[d]:[]):Promise.resolve([])).then(docs=>{
   docs.forEach(d=>{const x=d.data();if(x.active)VENUES[d.id]=x});
   const ids=Object.keys(VENUES).sort((a,b)=>VENUES[a].name.localeCompare(VENUES[b].name,"fr"));
-  if(!ids.length){closed(fixed&&docs.length?"Les réservations en ligne sont fermées pour cet établissement. Merci d'appeler le restaurant.":"Aucune réservation en ligne n'est ouverte pour le moment.");return}
+  if(!ids.length){closed(fixed&&docs.length?"Les réservations en ligne sont fermées pour cet établissement. Merci d'appeler le restaurant.":"Ce lien de réservation est incomplet. Utilisez le lien communiqué par votre restaurant.");return}
   venue=ids[0];$("form").hidden=false;$("subtitle").textContent="Choisissez votre restaurant et votre créneau";
   renderVenues();renderSlots();askConsent();
 }).catch(()=>closed("La page n'a pas pu se charger. Réessayez dans un instant ou appelez le restaurant."));
