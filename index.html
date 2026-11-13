@@ -232,7 +232,14 @@ footer a{color:var(--gold);font-weight:700}
 /* accents platine : le texte d'accent reste lisible sur le vert profond */
 h1 em,.jnum,.price em{background:linear-gradient(100deg,var(--g1) 10%,var(--g2) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
 /* vidéo de présentation : texte animé posé sur l'image, calé sur la vidéo */
-.vid{position:relative;z-index:1;padding-block:8px 26px}
+.vid{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(10,17,16,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:vfade .45s var(--ease) both;transition:opacity .5s var(--ease)}
+.vid.out{opacity:0;pointer-events:none}
+.vid .vbox{width:min(1040px,100%,calc((100vh - 60px)*16/9));animation:vpop .6s var(--ease) both}
+@keyframes vfade{from{opacity:0}to{opacity:1}}
+@keyframes vpop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.vclose{position:absolute;right:16px;top:16px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.3);background:rgba(22,33,31,.6);backdrop-filter:blur(10px);color:#fff;cursor:pointer;transition:transform .2s var(--ease),background-color .2s}
+.vclose:hover{transform:rotate(90deg);background:rgba(22,33,31,.9)}
+.vclose svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .vbox{position:relative;overflow:hidden;border-radius:28px;background:#16211f;border:1px solid rgba(22,33,31,.2);box-shadow:0 40px 90px rgba(22,33,31,.28)}
 .vbox video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
 .vshade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(22,33,31,.9) 0%,rgba(22,33,31,.55) 34%,rgba(22,33,31,0) 62%),linear-gradient(0deg,rgba(22,33,31,.55),rgba(22,33,31,0) 40%)}
@@ -251,7 +258,7 @@ h1 em,.jnum,.price em{background:linear-gradient(100deg,var(--g1) 10%,var(--g2) 
   .vshade{background:linear-gradient(0deg,rgba(22,33,31,.35),rgba(22,33,31,0) 40%);bottom:auto;aspect-ratio:16/9}
   .vtxt{position:static;width:auto;padding:22px 20px 26px}
   .vlines{min-height:calc(28px*2.4)}
-  .vsound{bottom:auto;top:14px;right:14px}
+  .vsound{bottom:auto;top:14px;right:auto;left:14px}.vid .vbox{width:100%}
 }
 </style>
 </head>
@@ -287,8 +294,8 @@ h1 em,.jnum,.price em{background:linear-gradient(100deg,var(--g1) 10%,var(--g2) 
   </div>
 </div>
 
-<div class="vid"><div class="in"><div class="vbox rv">
-  <video id="promo" src="promo.mp4" poster="promo.jpg" autoplay muted playsinline preload="metadata"></video>
+<div class="vid" id="intro" role="dialog" aria-modal="true" aria-label="Servioresa" hidden><div class="vbox">
+  <video id="promo" data-src="promo.mp4" poster="promo.jpg" muted playsinline preload="none"></video>
   <div class="vshade"></div>
   <div class="vtxt">
     <p class="eyebrow" data-t="v0">Servioresa en 10 secondes</p>
@@ -297,7 +304,8 @@ h1 em,.jnum,.price em{background:linear-gradient(100deg,var(--g1) 10%,var(--g2) 
     <a class="btn gold" href="#demo" data-t="v4">Demander une démo</a>
   </div>
   <button class="vsound" id="vsound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="w" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg><span data-t="v5">Activer le son</span></button>
-</div></div></div>
+  <button class="vclose" id="vclose" type="button" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div></div>
 
 <div class="band"><div class="in"><img src="salle.jpg" width="1100" height="1100" alt="" loading="lazy"><div class="bandtxt rv"><p class="eyebrow" data-t="bd0">Pendant le service</p><h2 data-t="bd1">La salle se remplit. Tout reste sous contrôle.</h2><p class="sub" data-t="bd2">Qui arrive, à quelle heure, à quelle table, avec quelles habitudes : l'équipe le sait avant que le client ne passe la porte.</p></div></div></div>
 
@@ -404,16 +412,26 @@ document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",
 /* anglais par défaut ; le choix du visiteur est gardé */
 let l0="en";try{l0=localStorage.getItem("langue")||"en"}catch(e){}
 if(l0==="en")setLang("en");
-/* vidéo : la phrase affichée suit le moment de la vidéo ; le son s'active au clic */
-(function(){const v=document.getElementById("promo");if(!v)return;const ls=[...document.querySelectorAll(".vl")],bs=[...document.querySelectorAll(".vbar i")],b=document.getElementById("vsound"),sp=b.querySelector("span");
+/* vidéo d'ouverture : fenêtre au lancement du site, une fois par visite ; elle se ferme seule à la fin et disparaît de la page */
+(function(){const box=document.getElementById("intro"),v=document.getElementById("promo");if(!box||!v)return;
+  let seen=false;try{seen=sessionStorage.getItem("intro")==="1"}catch(e){}
+  if(seen){box.remove();return}
+  try{sessionStorage.setItem("intro","1")}catch(e){}
+  const ls=[...document.querySelectorAll(".vl")],bs=[...document.querySelectorAll(".vbar i")],b=document.getElementById("vsound"),sp=b.querySelector("span");
   FR.v6="Couper le son";EN.v6="Mute";
   const show=i=>{ls.forEach((l,k)=>l.classList.toggle("on",k===i));bs.forEach((x,k)=>x.classList.toggle("on",k===i))};show(0);
+  let gone=false;const close=()=>{if(gone)return;gone=true;try{v.pause()}catch(e){}box.classList.add("out");document.documentElement.style.overflow="";setTimeout(()=>box.remove(),550)};
   v.addEventListener("timeupdate",()=>{const t=v.currentTime;show(t<3.2?0:t<6.2?1:2)});
+  v.addEventListener("ended",()=>setTimeout(close,700));
+  v.addEventListener("error",close);
   b.addEventListener("click",()=>{v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play().catch(()=>{})}b.setAttribute("aria-pressed",String(!v.muted));sp.dataset.t=v.muted?"v5":"v6";sp.textContent=(lang==="en"?EN:FR)[sp.dataset.t]});
-  /* une seule lecture : à la fin, l'image reste sur la tablette ; un clic sur la vidéo la relance */
-  v.addEventListener("ended",()=>show(2));
-  v.addEventListener("click",()=>{if(v.ended||v.paused){v.currentTime=0;v.play().catch(()=>{})}});
+  document.getElementById("vclose").addEventListener("click",close);
+  box.addEventListener("click",e=>{if(e.target===box)close()});
+  box.querySelector("a.btn").addEventListener("click",close);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+  box.hidden=false;document.documentElement.style.overflow="hidden";v.src=v.dataset.src;
   const p=v.play();if(p&&p.catch)p.catch(()=>{});
+  setTimeout(()=>{if(!gone&&v.currentTime<.2&&v.paused)close()},6000);   /* si la lecture ne démarre pas, on ne bloque pas le visiteur */
 })();
 /* bandeau défilant : le contenu est doublé pour boucler sans saut */
 const tr=document.querySelector(".track");tr.innerHTML+=tr.innerHTML.replace(/data-t="/g,'data-t2="');
