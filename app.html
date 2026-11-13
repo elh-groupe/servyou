@@ -469,7 +469,7 @@ function showWho(u){
   const ini=name.split(/[\s._-]+/).filter(Boolean).slice(0,2).map(x=>x[0].toUpperCase()).join("")||"?";
   const a=document.createElement("span");a.className="ava";a.textContent=ini;a.setAttribute("aria-hidden","true");
   const n=document.createElement("span");n.className="uname";n.textContent=name;
-  const r=document.createElement("small");r.textContent=mail===OWNER?"Responsable":"Équipe";n.appendChild(r);
+  const r=document.createElement("small");r.textContent=mail===OWNER?"Responsable":mail;r.style.textTransform=mail===OWNER?"":"none";r.style.letterSpacing=mail===OWNER?"":"0";n.appendChild(r);
   w.title=mail;w.append(a,n);
 }
 function boot(){
@@ -484,6 +484,7 @@ function boot(){
     if(!db){db=firebase.firestore();start()}
   });
   const er=m=>{const e=$("#lg_err");e.textContent=m;e.hidden=!m};
+  try{const r=sessionStorage.getItem("srv-refus");if(r){sessionStorage.removeItem("srv-refus");er("Le compte "+r+" n'a pas accès à cet espace. Le responsable doit d'abord l'ajouter dans Équipe → Créer un accès.")}}catch(x){}
   $("#loginForm").addEventListener("submit",e=>{e.preventDefault();er("");$("#lg_btn").disabled=true;
     auth.signInWithEmailAndPassword($("#lg_email").value.trim(),$("#lg_pass").value).catch(()=>er("E-mail ou mot de passe incorrect.")).then(()=>{$("#lg_btn").disabled=false})});
   $("#lg_google").addEventListener("click",()=>{er("");auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(x=>er(x&&x.code==="auth/popup-blocked"?"Autorisez les fenêtres pop-up pour ce site, puis réessayez.":x&&x.code==="auth/unauthorized-domain"?"Ce site n'est pas encore autorisé dans Firebase.":"La connexion Google n'a pas abouti."))});
@@ -504,7 +505,10 @@ function linkWeb(){
 }
 function start(){
   const timer=setTimeout(()=>note("Les données ne répondent pas encore. L'affichage peut être incomplet."),10000);
-  const ko=e=>{clearTimeout(timer);if(e&&e.code==="permission-denied"){note("");$("#nav").innerHTML="";$("#bar").innerHTML="";$("#body").innerHTML='<div class="empty">Le compte '+esc(me)+" n'a pas accès à Servioresa. Demandez au responsable de vous ajouter dans Équipe, ou déconnectez-vous pour changer de compte.</div>"}else note("Les données ne sont plus accessibles sur cette page.")};
+  const ko=e=>{clearTimeout(timer);if(e&&e.code==="permission-denied"){
+    /* compte non autorisé : on ne le laisse pas dans l'espace, retour à l'écran de connexion avec l'explication */
+    try{sessionStorage.setItem("srv-refus",me)}catch(x){}
+    firebase.auth().signOut().then(()=>location.reload(),()=>location.reload())}else note("Les données ne sont plus accessibles sur cette page.")};
   if(me===OWNER)db.collection("leads").onSnapshot(s=>{leads=s.docs.map(d=>Object.assign({id:d.id},d.data())).sort((x,y)=>String(y.createdAt).localeCompare(String(x.createdAt)));if(ui.view==="equipe"&&!E)paint()},()=>{});
   if(me===OWNER)db.collection("access").onSnapshot(s=>{access=s.docs.map(d=>Object.assign({id:d.id},d.data()));if(ui.view==="equipe"&&!E)paint()},()=>{});
   db.collection("venues").onSnapshot(s=>{
