@@ -195,65 +195,97 @@ body{margin:0}
   --side:#152120; --side-ink:#a9bab7; --side-on:#ffffff; --side-hi:#2f4b49;
   --display:"Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1); color-scheme:dark;
+ --acc:225,231,231; --gl:255,255,255; --on:#16211f; --deep:#16211f; --h1:#3f6f69; --h2:#7d8f90; --b1:#22383a; --b2:#2f5450; --b3:#56686a; --pop:#1f3231;
 }
+/* ----- thèmes : vert (par défaut), nuit, gold, blanc ----- */
+:root[data-th="nuit"]{--bg:#0d1330;--surface:#161d45;--sunken:#0a0f28;--ink:#f1f3fb;--muted:#a5aed0;--line:#2c3566;--accent:#e8ecff;--accent-ink:#0d1330;--accent-soft:rgba(214,222,255,.16);--gold:#e8ecff;--gold-2:#a9b4e6;--decor:#3b4580;--s1:#e8ecff;--side:#080c22;--side-hi:#2c3566;--side-ink:#a5aed0;--acc:214,222,255;--on:#0d1330;--deep:#080c22;--h1:#3a4aa0;--h2:#5a64a8;--b1:#1b2456;--b2:#2a2f6b;--b3:#4a5390;--pop:#121a3f}
+:root[data-th="gold"]{--bg:#17130d;--surface:#231d14;--sunken:#110e09;--ink:#f6efe2;--muted:#b9ad98;--line:#3f3524;--accent:#e6c079;--accent-ink:#1a1408;--accent-soft:rgba(230,192,121,.16);--gold:#e6c079;--gold-2:#b98d3e;--decor:#5a4a2c;--s1:#e6c079;--side:#100d08;--side-hi:#3f3524;--side-ink:#b9ad98;--acc:230,192,121;--on:#1a1408;--deep:#100d08;--h1:#6b5326;--h2:#8a6a2c;--b1:#2a2114;--b2:#4a3a1c;--b3:#7a5e2a;--pop:#1d1810}
+:root[data-th="blanc"]{--bg:#f2f5f4;--surface:#ffffff;--sunken:#e6ebe9;--ink:#16211f;--muted:#5b6b68;--line:#d3dbd8;--accent:#1f4a45;--accent-ink:#ffffff;--accent-soft:rgba(31,74,69,.12);--gold:#1f4a45;--gold-2:#2f6f67;
+  --reserve:#a8660c;--reserve-soft:#fbecd0;--occupe:#2f5bd8;--occupe-soft:#d9e4fc;--danger:#b3372f;--danger-soft:#f7dcd9;--decor:#c5d0cd;--s1:#1f4a45;--s2:#2f5bd8;--s3:#2a9d8f;--s4:#c8473d;--s5:#7d5aa6;
+  --side:#ffffff;--side-ink:#5b6b68;--side-on:#ffffff;--side-hi:#e6ebe9;--acc:31,74,69;--gl:22,33,31;--on:#ffffff;--deep:#16211f;--h1:#bfe0d9;--h2:#dfe6e4;--pop:#ffffff;color-scheme:light}
+:root[data-th="blanc"] .top,:root[data-th="blanc"] #login{--ink:#f4efe4;--muted:#a9bab7;--line:#3a5351;--surface:#243a39;--gl:255,255,255;--acc:225,231,231;--gold:#eef0f0;--gold-2:#b4bdbe;--on:#16211f;--h1:#3f6f69;--h2:#7d8f90;color:var(--ink)}
+:root[data-th="blanc"] .card,:root[data-th="blanc"] .scroll,:root[data-th="blanc"] .empty,:root[data-th="blanc"] nav{background:#fff;border-color:var(--line);box-shadow:0 10px 30px rgba(22,33,31,.07)}
+:root[data-th="blanc"] .card:hover{border-color:rgba(31,74,69,.45)}
+:root[data-th="blanc"] dialog[open]{box-shadow:0 30px 80px rgba(22,33,31,.25)}
+:root[data-th="blanc"] .btn:hover{box-shadow:0 8px 20px rgba(22,33,31,.12)}
+/* réglages : sous-menu et sections */
+.setnav{display:flex;flex-wrap:wrap;gap:8px}
+.setnav .btn{padding:9px 16px}
+.setwrap{display:flex;flex-direction:column;gap:14px}
+.setwrap .two{display:flex;flex-wrap:wrap;gap:14px;margin-top:0!important}
+.setwrap .two>.card{flex:1 1 420px;min-width:0}
+.setwrap>.card{margin-top:0!important}
+.sw{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.sw button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 16px;border-radius:16px;border:1px solid var(--line);background:rgba(var(--gl),.05);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;transition:transform .18s var(--ease),border-color .2s}
+.sw button:hover{transform:translateY(-3px);border-color:var(--gold)}
+.sw button.on{border-color:var(--gold);box-shadow:0 0 0 3px rgba(var(--acc),.25)}
+.sw i{width:74px;height:46px;border-radius:10px;display:block;border:1px solid rgba(128,128,128,.35)}
+.setwrap[data-set="etab"] [data-sec]:not([data-sec="etab"]),.setwrap[data-set="etab"] .two:not(:has([data-sec="etab"])){display:none}
+.setwrap[data-set="options"] [data-sec]:not([data-sec="options"]),.setwrap[data-set="options"] .two:not(:has([data-sec="options"])){display:none}
+.setwrap[data-set="online"] [data-sec]:not([data-sec="online"]),.setwrap[data-set="online"] .two:not(:has([data-sec="online"])){display:none}
+.setwrap[data-set="meta"] [data-sec]:not([data-sec="meta"]),.setwrap[data-set="meta"] .two:not(:has([data-sec="meta"])){display:none}
+.setwrap[data-set="google"] [data-sec]:not([data-sec="google"]),.setwrap[data-set="google"] .two:not(:has([data-sec="google"])){display:none}
+.setwrap[data-set="apparence"] [data-sec]:not([data-sec="apparence"]),.setwrap[data-set="apparence"] .two:not(:has([data-sec="apparence"])){display:none}
+.setwrap[data-set="salles"] [data-sec]:not([data-sec="salles"]),.setwrap[data-set="salles"] .two:not(:has([data-sec="salles"])){display:none}
+
 html{background:var(--bg)}
 body{font-feature-settings:"tnum" 1;position:relative;overflow-x:hidden}
 body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
-body::before{width:620px;height:620px;left:-180px;top:-200px;background:#3f6f69;opacity:.45;animation:drift1 20s ease-in-out infinite alternate}
-body::after{width:540px;height:540px;right:-160px;bottom:-180px;background:#7d8f90;opacity:.28;animation:drift2 24s ease-in-out infinite alternate}
+body::before{width:620px;height:620px;left:-180px;top:-200px;background:var(--h1);opacity:.45;animation:drift1 20s ease-in-out infinite alternate}
+body::after{width:540px;height:540px;right:-160px;bottom:-180px;background:var(--h2);opacity:.28;animation:drift2 24s ease-in-out infinite alternate}
 .wrap{position:relative;z-index:1}
 /* bannière */
-.top{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:22px 26px;background:linear-gradient(120deg,#22383a,#2f5450 35%,#56686a 70%,#22383a);background-size:300% 100%;animation:bannerMove 16s ease-in-out infinite alternate,rise .7s var(--ease) both;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.top{position:relative;overflow:hidden;border:1px solid rgba(var(--gl),.14);border-radius:22px;padding:22px 26px;background:linear-gradient(120deg,var(--b1),var(--b2) 35%,var(--b3) 70%,var(--b1));background-size:300% 100%;animation:bannerMove 16s ease-in-out infinite alternate,rise .7s var(--ease) both;box-shadow:0 24px 60px rgba(0,0,0,.4)}
 .top::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.14) 50%,transparent 60%);transform:translateX(-120%);animation:shine 6s 1s ease-in-out infinite;pointer-events:none}
-.top::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:18%;top:-120px;background:radial-gradient(circle,rgba(225,231,231,.5),transparent 65%);animation:float 9s ease-in-out infinite alternate;pointer-events:none}
+.top::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:18%;top:-120px;background:radial-gradient(circle,rgba(var(--acc),.5),transparent 65%);animation:float 9s ease-in-out infinite alternate;pointer-events:none}
 .top>*{position:relative;z-index:1}
 .top h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:34px;letter-spacing:-.01em;line-height:1}
 .brand{height:54px;width:auto;display:block}
 #login .brand{height:64px;margin:0 auto}
 .top .tag{font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-top:8px}
-#who{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--ink);animation:rise .6s .2s var(--ease) both;transition:border-color .2s,transform .2s var(--ease)}
+#who{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:999px;background:rgba(var(--gl),.08);border:1px solid rgba(var(--gl),.14);color:var(--ink);animation:rise .6s .2s var(--ease) both;transition:border-color .2s,transform .2s var(--ease)}
 #who:empty{display:none}
 #who:hover{border-color:var(--gold);transform:translateY(-1px)}
-.ava{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16211f;font-weight:800;font-size:14px;letter-spacing:.02em;box-shadow:0 0 0 0 rgba(225,231,231,.5);animation:halo 2.8s ease-out infinite}
+.ava{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--on);font-weight:800;font-size:14px;letter-spacing:.02em;box-shadow:0 0 0 0 rgba(var(--acc),.5);animation:halo 2.8s ease-out infinite}
 .uname{display:flex;flex-direction:column;line-height:1.15;font-weight:700;font-size:14px}
 .uname small{font-weight:600;font-size:11px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}
-@keyframes halo{0%{box-shadow:0 0 0 0 rgba(225,231,231,.5)}70%,100%{box-shadow:0 0 0 10px rgba(225,231,231,0)}}
+@keyframes halo{0%{box-shadow:0 0 0 0 rgba(var(--acc),.5)}70%,100%{box-shadow:0 0 0 10px rgba(var(--acc),0)}}
 /* boutons */
-.btn{border-radius:999px;background:rgba(255,255,255,.07);border-color:var(--line);color:var(--ink);font-weight:600;transition:transform .18s var(--ease),box-shadow .2s var(--ease),background-color .2s,border-color .2s,color .2s}
+.btn{border-radius:999px;background:rgba(var(--gl),.07);border-color:var(--line);color:var(--ink);font-weight:600;transition:transform .18s var(--ease),box-shadow .2s var(--ease),background-color .2s,border-color .2s,color .2s}
 .btn:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 8px 20px rgba(0,0,0,.3)}
 .btn:active{transform:scale(.95);box-shadow:none}
-.btn.primary{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#16211f;font-weight:800;box-shadow:0 10px 26px rgba(225,231,231,.28)}
+.btn.primary{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:var(--on);font-weight:800;box-shadow:0 10px 26px rgba(var(--acc),.28)}
 .btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:shine 3.8s 1.2s ease-in-out infinite}
-.btn.primary:hover{box-shadow:0 14px 32px rgba(225,231,231,.4)}
-.btn.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#16211f;animation:pick .3s var(--ease)}
+.btn.primary:hover{box-shadow:0 14px 32px rgba(var(--acc),.4)}
+.btn.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:var(--on);animation:pick .3s var(--ease)}
 .btn.danger{color:var(--danger);border-color:rgba(255,157,148,.45)}
 /* surfaces en verre */
 .card,.stat,.pane>.card{border-radius:18px}
-.card,table.data,.scroll,.empty{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.card,table.data,.scroll,.empty{background:linear-gradient(180deg,rgba(var(--gl),.08),rgba(var(--gl),.035));border:1px solid rgba(var(--gl),.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 table.data{background:transparent;border:0;backdrop-filter:none}
 .scroll{border-radius:18px;overflow:auto}
 .card{box-shadow:0 18px 44px rgba(0,0,0,.28);transition:box-shadow .25s var(--ease),transform .25s var(--ease),border-color .25s}
-.card:hover{border-color:rgba(225,231,231,.4)}
+.card:hover{border-color:rgba(var(--acc),.4)}
 .stats b{font-size:28px;font-weight:800;letter-spacing:-.02em;color:var(--gold)}
 .tabs{background:transparent;gap:8px;overflow:visible}
-.tabb{border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.05);color:var(--ink);transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s,background-color .2s;position:relative}
+.tabb{border:1px solid rgba(var(--gl),.12);border-radius:16px;background:rgba(var(--gl),.05);color:var(--ink);transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s,background-color .2s;position:relative}
 .tabb:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 10px 24px rgba(0,0,0,.3)}
-.tabb.on{border-color:var(--gold);background:rgba(225,231,231,.14);box-shadow:0 10px 26px rgba(225,231,231,.16)}
+.tabb.on{border-color:var(--gold);background:rgba(var(--acc),.14);box-shadow:0 10px 26px rgba(var(--acc),.16)}
 .tabb.on::after{content:"";position:absolute;left:16px;right:16px;bottom:-1px;height:3px;border-radius:3px;background:var(--gold);animation:grow .35s var(--ease)}
 .tabb b{font-weight:800}
 table.data th{color:var(--gold);letter-spacing:.08em}
 table.data tbody tr{transition:background-color .15s}
-table.data tbody tr:hover{background:rgba(225,231,231,.08)}
+table.data tbody tr:hover{background:rgba(var(--acc),.08)}
 table.data tr.web td:first-child{box-shadow:inset 3px 0 0 var(--gold)}
 table.data tr.web .time::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-left:8px;vertical-align:middle;animation:pulse 1.6s ease-in-out infinite}
 .pill{border-radius:999px;font-weight:600}
-.tchip{background:rgba(225,231,231,.16);color:var(--gold);border:1px solid rgba(225,231,231,.35);border-radius:10px}
-input,select,textarea{background:rgba(255,255,255,.07);border-color:var(--line);color:var(--ink);border-radius:12px;transition:border-color .15s,box-shadow .15s,background-color .15s}
-select option{background:#243a39;color:#f4efe4}
-input::placeholder,textarea::placeholder{color:#8a9c99}
-input:focus,select:focus,textarea:focus{border-color:var(--gold)!important;box-shadow:0 0 0 4px rgba(225,231,231,.18)!important;outline:none}
-#toast{border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16211f;font-weight:700;box-shadow:0 14px 34px rgba(0,0,0,.4);animation:toastIn .35s var(--ease)}
-dialog{background:#1f3231;color:var(--ink);border:1px solid rgba(255,255,255,.14)}
+.tchip{background:rgba(var(--acc),.16);color:var(--gold);border:1px solid rgba(var(--acc),.35);border-radius:10px}
+input,select,textarea{background:rgba(var(--gl),.07);border-color:var(--line);color:var(--ink);border-radius:12px;transition:border-color .15s,box-shadow .15s,background-color .15s}
+select option{background:var(--surface);color:var(--ink)}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)!important;box-shadow:0 0 0 4px rgba(var(--acc),.18)!important;outline:none}
+#toast{border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--on);font-weight:700;box-shadow:0 14px 34px rgba(0,0,0,.4);animation:toastIn .35s var(--ease)}
+dialog{background:var(--pop);color:var(--ink);border:1px solid rgba(var(--gl),.14)}
 dialog[open]{animation:pop .28s var(--ease);border-radius:20px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
 dialog::backdrop{background:rgba(10,17,16,.6);backdrop-filter:blur(4px);animation:fade .25s}
 #bar{animation:rise .5s .1s var(--ease) both}
@@ -266,27 +298,27 @@ dialog::backdrop{background:rgba(10,17,16,.6);backdrop-filter:blur(4px);animatio
 #body.enter table.data tbody tr{animation:rise .4s var(--ease) both}
 #body.enter table.data tbody tr:nth-child(2){animation-delay:.04s}#body.enter table.data tbody tr:nth-child(3){animation-delay:.08s}#body.enter table.data tbody tr:nth-child(4){animation-delay:.12s}#body.enter table.data tbody tr:nth-child(n+5){animation-delay:.16s}
 #body.enter svg.chart rect{transform-box:fill-box;transform-origin:bottom;animation:barUp .7s var(--ease) both}
-.tg button,.ps button,.mc button{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink);border-radius:10px;transition:transform .15s var(--ease),background-color .15s,border-color .15s}
-.tg button:hover,.ps button:hover,.mc button:hover{background:rgba(225,231,231,.14);border-color:var(--gold);transform:translateY(-1px)}
+.tg button,.ps button,.mc button{background:rgba(var(--gl),.06);border-color:var(--line);color:var(--ink);border-radius:10px;transition:transform .15s var(--ease),background-color .15s,border-color .15s}
+.tg button:hover,.ps button:hover,.mc button:hover{background:rgba(var(--acc),.14);border-color:var(--gold);transform:translateY(-1px)}
 .tg button:active,.ps button:active{transform:scale(.94)}
-.tg button.on,.ps button.on,.mc button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:#16211f;animation:pick .25s var(--ease)}
+.tg button.on,.ps button.on,.mc button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));border-color:var(--gold);color:var(--on);animation:pick .25s var(--ease)}
 .mc button{background:transparent;border-color:transparent}
-.gr{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink);transition:transform .15s var(--ease),border-color .15s}
+.gr{background:rgba(var(--gl),.06);border-color:var(--line);color:var(--ink);transition:transform .15s var(--ease),border-color .15s}
 .gr:hover{transform:translateX(3px)}
-#login{background:radial-gradient(900px 520px at 12% 8%,#3f6f69 0,transparent 60%),radial-gradient(760px 520px at 92% 92%,#6f8082 0,transparent 55%),#16211f}
-#login form{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14);border-radius:24px;backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(0,0,0,.5);animation:rise .7s var(--ease) both}
+#login{background:radial-gradient(900px 520px at 12% 8%,var(--h1) 0,transparent 60%),radial-gradient(760px 520px at 92% 92%,var(--h2) 0,transparent 55%),var(--deep)}
+#login form{background:linear-gradient(180deg,rgba(var(--gl),.1),rgba(var(--gl),.04));border:1px solid rgba(var(--gl),.14);border-radius:24px;backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(0,0,0,.5);animation:rise .7s var(--ease) both}
 #login h1{font-family:"Fraunces",Georgia,serif;font-size:38px}
 #login form::before{content:"ESPACE ÉQUIPE";text-align:center;font-size:11px;font-weight:700;letter-spacing:.32em;color:var(--gold)}
 @media (min-width:1000px){
-  nav{background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,0,0,.35);border-radius:20px;animation:rise .6s .05s var(--ease) both}
+  nav{background:linear-gradient(180deg,rgba(var(--gl),.1),rgba(var(--gl),.04));border:1px solid rgba(var(--gl),.12);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,0,0,.35);border-radius:20px;animation:rise .6s .05s var(--ease) both}
   nav a{transition:background-color .2s,color .2s,transform .2s var(--ease)}
-  nav a:hover{transform:scale(1.12);color:var(--gold);background:rgba(225,231,231,.12)}
-  nav a.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#16211f;box-shadow:0 8px 20px rgba(225,231,231,.3)}
+  nav a:hover{transform:scale(1.12);color:var(--gold);background:rgba(var(--acc),.12)}
+  nav a.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--on);box-shadow:0 8px 20px rgba(var(--acc),.3)}
   .ni:hover .fly,.ni:focus-within .fly{animation:flyIn .22s var(--ease) both}
-  .fly>div{background:#1f3231;border:1px solid #3a5351;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  .fly>div{background:var(--pop);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
   .fly button{transition:background-color .15s,padding-left .2s var(--ease),color .15s}
   .fly button:hover{padding-left:16px;color:var(--gold)}
-  .fly button.on{background:rgba(225,231,231,.16);color:var(--gold)}
+  .fly button.on{background:rgba(var(--acc),.16);color:var(--gold)}
 }
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -356,8 +388,8 @@ const TABS={toutes:["Toutes",r=>r.status!=="attente"],avenir:["À venir",r=>r.st
 const VIEWS={reservations:"Réservations",planning:"Planning",calendrier:"Calendrier",clients:"Clients",statistiques:"Statistiques",carte:"Carte",equipe:"Équipe",journal:"Journal",reglages:"Réglages"};
 const ICONS={reservations:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',planning:'<path d="M3 5h18v14H3zM3 10h18M9 5v14M12 14.5h6"/>',calendrier:'<path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/>',clients:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',statistiques:'<path d="M5 20V10M10 20V4M15 20v-8M20 20v-5"/>',carte:'<path d="M6 3v8a2 2 0 0 0 4 0V3M8 3v18M17 3c-2 2-3 5-3 8h3zM17 11v10"/>',equipe:'<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c2.4.6 4 2.3 4 5.2"/>',journal:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',reglages:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>'};
 /* menu latéral : même regroupement que l'outil que l'équipe connaît, le terme anglais habituel est rappelé dans le volet */
-const NAV=[{k:"reservations",en:"Dashboard",sub:[["reservations","liste","Liste"],["reservations","plan","Plan de salle (Floorplan)"],["planning","","Planning (Timeline)"],["calendrier","","Calendrier"]]},{k:"clients",en:"Guestbook"},{k:"statistiques",en:"Analytics",sub:[["statistiques","synthese","Synthèse (Summary Report)"],["statistiques","clients","Meilleurs clients (Top Clients)"],["statistiques","jour","Rapport journalier (Daily Report)"],["statistiques","nvr","Nouveaux et habitués (New vs Returning)"],["statistiques","manager","Rapport manager (Manager Report)"]]},{k:"equipe",en:"Staff"},{k:"carte",en:"Digital Menu"},{k:"journal",en:"Logs"},{k:"reglages",en:"Settings"}];
-const subOn=x=>x[0]===ui.view&&(x[0]==="statistiques"?ui.rep===x[1]:x[0]==="reservations"?(ui.mode==="plan")===(x[1]==="plan"):true);
+const NAV=[{k:"reservations",en:"Dashboard",sub:[["reservations","liste","Liste"],["reservations","plan","Plan de salle (Floorplan)"],["planning","","Planning (Timeline)"],["calendrier","","Calendrier"]]},{k:"clients",en:"Guestbook"},{k:"statistiques",en:"Analytics",sub:[["statistiques","synthese","Synthèse (Summary Report)"],["statistiques","clients","Meilleurs clients (Top Clients)"],["statistiques","jour","Rapport journalier (Daily Report)"],["statistiques","nvr","Nouveaux et habitués (New vs Returning)"],["statistiques","manager","Rapport manager (Manager Report)"]]},{k:"equipe",en:"Staff"},{k:"carte",en:"Digital Menu"},{k:"journal",en:"Logs"},{k:"reglages",en:"Settings",sub:[["reglages","etab","Établissement et services"],["reglages","options","Options et statuts"],["reglages","online","Réservation en ligne"],["reglages","meta","Meta Pixel"],["reglages","google","Google"],["reglages","apparence","Apparence et préférences"],["reglages","salles","Salles et tables"]]}];
+const subOn=x=>x[0]===ui.view&&(x[0]==="reglages"?ui.set===x[1]:x[0]==="statistiques"?ui.rep===x[1]:x[0]==="reservations"?(ui.mode==="plan")===(x[1]==="plan"):true);
 const viewSw=()=>NAV[0].sub.map(x=>'<button class="btn small'+(subOn(x)?" on":"")+'" data-act="go" data-v="'+x[0]+'" data-o="'+x[1]+'">'+x[2].replace(/ \(.*/,"")+"</button>").join("");
 const ROLES=["Gérant","Manager","Hôte d'accueil","Serveur","Cuisine"];
 const DAYS=["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
@@ -377,9 +409,13 @@ const sum=(a,f)=>a.reduce((n,x)=>n+(+f(x)||0),0);
 let db=null,user=null,me="",readOnly=false;
 let venues=[],vid=null,res=[],menu=[],logs=[],clients=[],staff=[],unsubs=[],names={};
 const today=iso(new Date());
-const ui={view:"reservations",day:today,q:"",tab:"toutes",sec:0,sel:null,month:today.slice(0,7),from:addDays(today,-6),to:today,shift:"",rep:"synthese",tsort:"arr",cq:"",lq:"",csort:"name",setSec:0};
+const ui={view:"reservations",day:today,q:"",tab:"toutes",sec:0,sel:null,month:today.slice(0,7),from:addDays(today,-6),to:today,shift:"",rep:"synthese",tsort:"arr",cq:"",lq:"",csort:"name",setSec:0,set:"etab"};
 let E=null,F=null,confirmDel=false,CS={},EXP=null,dl=null;
 const P=Object.assign({sortBy:"time",sortDir:"asc",defTime:"20:00",stay:false,mcols:["date","time","name","phone","covers","table","status","source","spend"]},(()=>{try{return JSON.parse(localStorage.getItem("cds-prefs"))||{}}catch(e){return{}}})());
+const THEMES=[["vert","Vert","linear-gradient(135deg,#1c2b2a 55%,#eef0f0 55%)"],["blanc","Blanc","linear-gradient(135deg,#f2f5f4 55%,#1f4a45 55%)"],["gold","Gold","linear-gradient(135deg,#17130d 55%,#e6c079 55%)"],["nuit","Nuit","linear-gradient(135deg,#0d1330 55%,#e8ecff 55%)"]];
+function setTheme(k){if(!THEMES.some(t=>t[0]===k))k="vert";if(k==="vert")delete document.documentElement.dataset.th;else document.documentElement.dataset.th=k;try{localStorage.setItem("srv-theme",k)}catch(e){}}
+const theme=()=>document.documentElement.dataset.th||"vert";
+try{setTheme(localStorage.getItem("srv-theme")||"vert")}catch(e){}
 const saveP=()=>{try{localStorage.setItem("cds-prefs",JSON.stringify(P))}catch(e){}};
 const money=n=>(Math.round((+n||0)*100)/100).toLocaleString("fr-FR",{maximumFractionDigits:2});
 const pct=(a,b)=>b?Math.round(100*a/b)+" %":"–";
@@ -820,22 +856,24 @@ journal(){
 },
 reglages(){
   const v=V(),secs=v.sections||[],si=Math.min(ui.setSec,secs.length-1),sec=secs[si]||{tables:[]};
-  let h='<div class="two"><div class="card"><div class="row between"><h2>Établissement</h2><button class="btn small" data-act="editVenue">Modifier</button></div><div><b>'+esc(v.name)+"</b>"+(v.address||v.phone||v.website?'<br><span class="muted">'+esc([v.address,v.phone,v.website].filter(Boolean).join(" · "))+"</span>":"")+(v.bookingUrl?'<br>Lien de réservation de cet établissement : <span style="user-select:all;overflow-wrap:anywhere"><b>'+esc(v.bookingUrl+(v.bookingUrl.includes("?")?"&":"?")+"r="+v.id)+"</b></span>":"")+'<br><span class="muted">Durée d\'une réservation : '+(+v.duration||120)+" min</span></div>";
+  const SN=NAV.find(n=>n.k==="reglages").sub;
+  let h='<div class="setwrap" data-set="'+esc(ui.set)+'"><div class="setnav">'+SN.map(x=>'<button class="btn'+(ui.set===x[1]?" on":"")+'" data-act="go" data-v="reglages" data-o="'+x[1]+'">'+x[2]+"</button>").join("")+'</div><div class="two"><div class="card" data-sec="etab"><div class="row between"><h2>Établissement</h2><button class="btn small" data-act="editVenue">Modifier</button></div><div><b>'+esc(v.name)+"</b>"+(v.address||v.phone||v.website?'<br><span class="muted">'+esc([v.address,v.phone,v.website].filter(Boolean).join(" · "))+"</span>":"")+(v.bookingUrl?'<br>Lien de réservation de cet établissement : <span style="user-select:all;overflow-wrap:anywhere"><b>'+esc(v.bookingUrl+(v.bookingUrl.includes("?")?"&":"?")+"r="+v.id)+"</b></span>":"")+'<br><span class="muted">Durée d\'une réservation : '+(+v.duration||120)+" min</span></div>";
   h+='<h3>Étiquettes de réservation</h3><div class="chips">'+(v.tags||[]).map(t=>'<span class="pill">'+esc(t)+"</span>").join("")+'</div><h3>Étiquettes client</h3><div class="chips">'+(v.guestTags||[]).map(t=>'<span class="pill">'+esc(t)+"</span>").join("")+'</div><h3>Sources</h3><div class="chips">'+(v.sources||[]).map(t=>'<span class="pill">'+esc(t)+"</span>").join("")+"</div></div>";
-  h+='<div class="card"><div class="row between"><h2>Services</h2><button class="btn small" data-act="editShift">Ajouter un service</button></div>'+((v.shifts||[]).length?'<table class="data" style="min-width:0"><tbody>'+v.shifts.map(s=>"<tr><td><b>"+esc(s.name)+'</b><br><span class="muted">'+((s.days||[]).length===7?"Tous les jours":(s.days||[]).map(d=>DAYS[d]).join(", "))+"</span></td><td>"+esc(s.start)+" – "+esc(s.end)+'</td><td class="num"><button class="btn small" data-act="editShift" data-id="'+esc(s.id)+'">Modifier</button></td></tr>').join("")+"</tbody></table>":'<div class="empty">Aucun service défini.</div>')+"</div></div>";
+  h+='<div class="card" data-sec="etab"><div class="row between"><h2>Services</h2><button class="btn small" data-act="editShift">Ajouter un service</button></div>'+((v.shifts||[]).length?'<table class="data" style="min-width:0"><tbody>'+v.shifts.map(s=>"<tr><td><b>"+esc(s.name)+'</b><br><span class="muted">'+((s.days||[]).length===7?"Tous les jours":(s.days||[]).map(d=>DAYS[d]).join(", "))+"</span></td><td>"+esc(s.start)+" – "+esc(s.end)+'</td><td class="num"><button class="btn small" data-act="editShift" data-id="'+esc(s.id)+'">Modifier</button></td></tr>').join("")+"</tbody></table>":'<div class="empty">Aucun service défini.</div>')+"</div></div>";
   const o=O(),yn=b=>b?"Oui":"Non",kv=a=>'<div class="kv">'+a.map(x=>"<span>"+x[0]+"</span><span>"+esc(x[1])+"</span>").join("")+"</div>";
-  h+='<div class="two" style="margin-top:14px"><div class="card"><div class="row between"><h2>Options de réservation</h2><button class="btn small" data-act="editOpts">Modifier</button></div>'+kv([["Afficher le numéro de référence",yn(o.showRef)],["Source obligatoire",yn(o.forceSource)],["Téléphone obligatoire",yn(o.phoneReq)],["E-mail obligatoire",yn(o.emailReq)],["Attribuer une table automatiquement",yn(o.autoAssign)],["Statut par défaut d'un walk-in",STAT[o.walkinStatus]||""],["Taille maximale d'un groupe",o.maxParty?o.maxParty+" couverts":"Sans limite"]])+"</div>";
+  h+='<div class="two" style="margin-top:14px"><div class="card" data-sec="options"><div class="row between"><h2>Options de réservation</h2><button class="btn small" data-act="editOpts">Modifier</button></div>'+kv([["Afficher le numéro de référence",yn(o.showRef)],["Source obligatoire",yn(o.forceSource)],["Téléphone obligatoire",yn(o.phoneReq)],["E-mail obligatoire",yn(o.emailReq)],["Attribuer une table automatiquement",yn(o.autoAssign)],["Statut par défaut d'un walk-in",STAT[o.walkinStatus]||""],["Taille maximale d'un groupe",o.maxParty?o.maxParty+" couverts":"Sans limite"]])+"</div>";
   const base=location.origin+location.pathname.replace(/[^/]*$/,"")+"reserver.html?r=",pb=pub||{};
   const lrow=(id,lab,del)=>'<div class="row between" style="gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line)"><div style="min-width:0;flex:1 1 260px"><span class="muted">'+esc(lab)+'</span><br><b style="user-select:all;overflow-wrap:anywhere">'+esc(base+id)+'</b></div><div class="row" style="gap:6px"><button class="btn small" data-act="copyLink" data-id="'+esc(id)+'">Copier</button>'+(del?'<button class="btn small" data-act="delLink" data-id="'+esc(id)+'">Supprimer</button>':"")+"</div></div>";
-  h+='<div class="card"><div class="row between"><h2>Réservation en ligne</h2><div class="row" style="gap:6px"><button class="btn small" data-act="addLink">Ajouter un lien</button><button class="btn small" data-act="editOnline">Modifier</button></div></div><div>Liens à donner aux clients :'+lrow(v.id,"Lien principal",0)+links.map(l=>lrow(l.id,l.label?"Lien « "+l.label+" »":"Lien personnalisé",1)).join("")+'</div><span class="muted">Créez un lien par usage (Instagram, Google, site du restaurant…) : chaque réservation garde le nom du lien utilisé.</span>'+kv([["Réservation en ligne",pub?(pb.active?"Ouverte":"Fermée"):"Non configurée"],["Couverts maximum par demande",pb.maxGuests||"Sans limite"],["Dernière heure proposée",pb.lastOnline||"1 h avant la fin du service"]])+'<span class="muted">Les demandes arrivent directement dans la liste, en statut « En attente », avec la source « Site web ».</span></div>';
+  h+='<div class="card" data-sec="online"><div class="row between"><h2>Réservation en ligne</h2><div class="row" style="gap:6px"><button class="btn small" data-act="addLink">Ajouter un lien</button><button class="btn small" data-act="editOnline">Modifier</button></div></div><div>Liens à donner aux clients :'+lrow(v.id,"Lien principal",0)+links.map(l=>lrow(l.id,l.label?"Lien « "+l.label+" »":"Lien personnalisé",1)).join("")+'</div><span class="muted">Créez un lien par usage (Instagram, Google, site du restaurant…) : chaque réservation garde le nom du lien utilisé.</span>'+kv([["Réservation en ligne",pub?(pb.active?"Ouverte":"Fermée"):"Non configurée"],["Couverts maximum par demande",pb.maxGuests||"Sans limite"],["Dernière heure proposée",pb.lastOnline||"1 h avant la fin du service"]])+'<span class="muted">Les demandes arrivent directement dans la liste, en statut « En attente », avec la source « Site web ».</span></div>';
   const ev=(a,b)=>'<div class="row between" style="gap:10px;padding:6px 0;border-top:1px solid var(--line)"><span>'+a+'</span><b>'+b+"</b></div>";
-  h+='<div class="card"><div class="row between"><h2>Meta Pixel (Facebook / Instagram)</h2><button class="btn small" data-act="editMeta">Modifier</button></div>'+kv([["Pixel",pb.pixel?"Actif — "+pb.pixel:"Non installé"]])+'<div style="margin-top:8px"><span class="muted">Ce que Meta enregistre sur la page de réservation :</span>'+ev("Le client a vu la page","PageView")+ev("Le client a choisi une heure","ChoixCreneau")+ev("Le client a cliqué sur le bouton Réserver","InitiateCheckout")+ev("La réservation est bien envoyée","Schedule + Lead")+"</div></div>";
-  h+='<div class="card"><div class="row between"><h2>Google (Analytics / Ads)</h2><button class="btn small" data-act="editGoogle">Modifier</button></div>'+kv([["Google tag",pb.gtag?"Actif — "+pb.gtag:"Non installé"],["Google Tag Manager",pb.gtm?"Actif — "+pb.gtm:"Non installé"]])+'<div style="margin-top:8px"><span class="muted">Ce que Google enregistre sur la page de réservation :</span>'+ev("Le client a vu la page","page_view")+ev("Le client a choisi une heure","select_item")+ev("Le client a cliqué sur le bouton Réserver","begin_checkout")+ev("La réservation est bien envoyée","generate_lead")+"</div></div>";
-  h+='<div class="card"><div class="row between"><h2>Statuts</h2><button class="btn small" data-act="editStatuses">Modifier</button></div><h3>Pré-service</h3><div class="chips">'+stKeys("p").map(k=>pill(PRE[k])).join("")+'</div><h3>En service</h3><div class="chips">'+stKeys("s").map(k=>pill(SVC[k])).join("")+'</div><span class="muted">Les statuts de base ne se désactivent pas ; les autres s\'ajoutent ici.</span></div>';
-  h+='<div class="card"><div class="row between"><h2>Mes préférences</h2><button class="btn small" data-act="editPrefs">Modifier</button></div>'+kv([["Trier les réservations par",{time:"Heure",name:"Nom",covers:"Couverts",created:"Date de création"}[P.sortBy]||"Heure"],["Ordre",P.sortDir==="desc"?"Décroissant":"Croissant"],["Heure proposée pour une nouvelle réservation",P.defTime],["Après un ajout",P.stay?"Rester sur le formulaire":"Revenir à la liste"]])+'<span class="muted">Réglages propres à cet appareil.</span></div></div>';
-  h+='<div class="card" style="margin-top:14px"><div class="row between"><h2>Salles et tables</h2><div class="row"><button class="btn small" data-act="editSection">Ajouter une salle</button>'+(secs.length?'<button class="btn small" data-act="editSection" data-i="'+si+'">Renommer la salle</button><button class="btn small primary" data-act="editTable">Ajouter une table</button>':"")+'</div></div><div class="row">'+secs.map((s,i)=>'<button class="btn small'+(i===si?" on":"")+'" data-act="setSec" data-i="'+i+'">'+esc(s.name)+" ("+(s.tables||[]).length+")</button>").join("")+"</div>";
+  h+='<div class="card" data-sec="meta"><div class="row between"><h2>Meta Pixel (Facebook / Instagram)</h2><button class="btn small" data-act="editMeta">Modifier</button></div>'+kv([["Pixel",pb.pixel?"Actif — "+pb.pixel:"Non installé"]])+'<div style="margin-top:8px"><span class="muted">Ce que Meta enregistre sur la page de réservation :</span>'+ev("Le client a vu la page","PageView")+ev("Le client a choisi une heure","ChoixCreneau")+ev("Le client a cliqué sur le bouton Réserver","InitiateCheckout")+ev("La réservation est bien envoyée","Schedule + Lead")+"</div></div>";
+  h+='<div class="card" data-sec="google"><div class="row between"><h2>Google (Analytics / Ads)</h2><button class="btn small" data-act="editGoogle">Modifier</button></div>'+kv([["Google tag",pb.gtag?"Actif — "+pb.gtag:"Non installé"],["Google Tag Manager",pb.gtm?"Actif — "+pb.gtm:"Non installé"]])+'<div style="margin-top:8px"><span class="muted">Ce que Google enregistre sur la page de réservation :</span>'+ev("Le client a vu la page","page_view")+ev("Le client a choisi une heure","select_item")+ev("Le client a cliqué sur le bouton Réserver","begin_checkout")+ev("La réservation est bien envoyée","generate_lead")+"</div></div>";
+  h+='<div class="card" data-sec="options"><div class="row between"><h2>Statuts</h2><button class="btn small" data-act="editStatuses">Modifier</button></div><h3>Pré-service</h3><div class="chips">'+stKeys("p").map(k=>pill(PRE[k])).join("")+'</div><h3>En service</h3><div class="chips">'+stKeys("s").map(k=>pill(SVC[k])).join("")+'</div><span class="muted">Les statuts de base ne se désactivent pas ; les autres s\'ajoutent ici.</span></div>';
+  h+='<div class="card" data-sec="apparence"><div class="row between"><h2>Mes préférences</h2><button class="btn small" data-act="editPrefs">Modifier</button></div>'+kv([["Trier les réservations par",{time:"Heure",name:"Nom",covers:"Couverts",created:"Date de création"}[P.sortBy]||"Heure"],["Ordre",P.sortDir==="desc"?"Décroissant":"Croissant"],["Heure proposée pour une nouvelle réservation",P.defTime],["Après un ajout",P.stay?"Rester sur le formulaire":"Revenir à la liste"]])+'<span class="muted">Réglages propres à cet appareil.</span></div></div>';
+  h+='<div class="two"><div class="card" data-sec="apparence"><h2>Apparence</h2><span class="muted">Choisissez les couleurs de votre espace. Le choix est gardé sur cet appareil.</span><div class="sw">'+THEMES.map(t=>'<button type="button" data-act="theme" data-k="'+t[0]+'"'+(theme()===t[0]?' class="on"':"")+'><i style="background:'+t[2]+'"></i>'+t[1]+"</button>").join("")+"</div></div></div>";
+  h+='<div class="card" data-sec="salles"><div class="row between"><h2>Salles et tables</h2><div class="row"><button class="btn small" data-act="editSection">Ajouter une salle</button>'+(secs.length?'<button class="btn small" data-act="editSection" data-i="'+si+'">Renommer la salle</button><button class="btn small primary" data-act="editTable">Ajouter une table</button>':"")+'</div></div><div class="row">'+secs.map((s,i)=>'<button class="btn small'+(i===si?" on":"")+'" data-act="setSec" data-i="'+i+'">'+esc(s.name)+" ("+(s.tables||[]).length+")</button>").join("")+"</div>";
   h+=(sec.tables||[]).length?'<div style="overflow-x:auto"><table class="data" style="min-width:0"><thead><tr><th>Table</th><th class="num">Couverts</th><th>Forme</th><th></th></tr></thead><tbody>'+sec.tables.slice().sort(nat).map(t=>"<tr><td><b>"+esc(t.name)+'</b></td><td class="num">'+t.seats+"</td><td>"+(t.shape==="c"?"Ronde":t.shape==="r"?"Rectangulaire":"Carrée")+'</td><td class="num"><button class="btn small" data-act="editTable" data-id="'+esc(t.id)+'">Modifier</button></td></tr>').join("")+"</tbody></table></div>":'<div class="empty">Aucune table dans cette salle.</div>';
-  return h+"</div>";
+  return h+"</div></div>";
 }};
 
 /* ---------- formulaire générique ---------- */
@@ -911,8 +949,8 @@ const A={
   pick(d){ui.sel=ui.sel===d.t?null:d.t;paint()}, csort(d){ui.csort=d.k;paint()},
   newRes(d){formRes(null,{table:d.t,time:d.time,status:d.status})},
   walkin(){const n=new Date(),m=Math.round((n.getHours()*60+n.getMinutes())/15)*15;if(ui.day!==today){ui.day=today;mount()}formRes(null,{walkin:true,status:O().walkinStatus,time:hm(m)})},
-  go(d){E=null;if(d.v==="statistiques"&&d.o)ui.rep=d.o;if(d.v==="reservations"&&d.o)ui.mode=d.o;if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();if(location.hash.slice(1)===d.v||(!location.hash&&d.v==="reservations"))mount();else location.hash=d.v}, rep(d){ui.rep=d.k;paint()}, tsort(d){ui.tsort=d.k;paint()}, preset(d){ui.to=today;ui.from=addDays(today,-(+d.n-1));mount()},
-  exportCsv(){exportCsv()}, importWeb(){formImport()}, editOnline(){formOnline()}, addLink(){formLink()}, editMeta(){formMeta()}, editGoogle(){formGoogle()},
+  go(d){E=null;if(d.v==="reglages"&&d.o)ui.set=d.o;if(d.v==="statistiques"&&d.o)ui.rep=d.o;if(d.v==="reservations"&&d.o)ui.mode=d.o;if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();if(location.hash.slice(1)===d.v||(!location.hash&&d.v==="reservations"))mount();else location.hash=d.v}, rep(d){ui.rep=d.k;paint()}, tsort(d){ui.tsort=d.k;paint()}, preset(d){ui.to=today;ui.from=addDays(today,-(+d.n-1));mount()},
+  exportCsv(){exportCsv()}, importWeb(){formImport()}, editOnline(){formOnline()}, addLink(){formLink()}, editMeta(){formMeta()}, theme(d){setTheme(d.k);paint()}, editGoogle(){formGoogle()},
   copyLink(d){const u=location.origin+location.pathname.replace(/[^/]*$/,"")+"reserver.html?r="+d.id;navigator.clipboard.writeText(u).then(()=>toast("Lien copié"),()=>toast("Copie impossible ici : sélectionnez le lien à la main."))},
   delLink(d){const b=document.querySelector('[data-act="delLink"][data-id="'+d.id+'"]');if(b&&!b.dataset.sure){b.dataset.sure="1";b.textContent="Confirmer";return}if(!links.some(l=>l.id===d.id))return;safe(()=>db.doc("public/"+d.id).delete(),"Lien supprimé")},
   async seed(){try{need();const ex=await db.collection("venues").get();if(!ex.empty){toast("Les établissements existent déjà.");return}
