@@ -1,7 +1,8 @@
-# servYou
+# Servioresa
 
-Logiciel interne de reservations des restaurants ELH.
+Logiciel de reservation pour restaurants.
 
-- index.html : le logiciel (connexion par e-mail et mot de passe)
-- reserver.html : la page publique de reservation, un lien par etablissement (reserver.html?r=pti-versailles)
-- firestore.rules : copie des regles de securite de la base Firebase
+- index.html : page d'accueil
+- app.html : espace equipe (connexion requise)
+- reserver.html : page de reservation, ouverte avec le lien de l'etablissement
+- firestore.rules : copie des regles de securite de la base
